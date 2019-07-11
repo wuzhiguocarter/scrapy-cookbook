@@ -1,0 +1,450 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Scrapy教程11- 模拟登录 &mdash; scrapy-cookbook 0.2.2 文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="Scrapy教程12- 抓取动态网站" href="scrapy-12.html" />
+    <link rel="prev" title="Scrapy教程10- 动态配置爬虫" href="scrapy-10.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> scrapy-cookbook
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="scrapy-01.html">Scrapy教程01- 入门篇</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-02.html">Scrapy教程02- 完整示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-03.html">Scrapy教程03- Spider详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-04.html">Scrapy教程04- Selector详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-05.html">Scrapy教程05- Item详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-06.html">Scrapy教程06- Item Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-07.html">Scrapy教程07- 内置服务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-08.html">Scrapy教程08- 文件与图片</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-09.html">Scrapy教程09- 部署</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-10.html">Scrapy教程10- 动态配置爬虫</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Scrapy教程11- 模拟登录</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#start-requests">重写start_requests方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#formrequest">使用FormRequest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#requests-to-follow">重写_requests_to_follow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">页面处理方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">完整源码</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-12.html">Scrapy教程12- 抓取动态网站</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other/about.html">联系我</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scrapy-cookbook</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Scrapy教程11- 模拟登录</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/scrapy-11.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="scrapy11">
+<h1>Scrapy教程11- 模拟登录<a class="headerlink" href="#scrapy11" title="永久链接至标题">¶</a></h1>
+<p>有时候爬取网站的时候需要登录，在Scrapy中可以通过模拟登录保存cookie后再去爬取相应的页面。这里我通过登录github然后爬取自己的issue列表来演示下整个原理。</p>
+<p>要想实现登录就需要表单提交，先通过浏览器访问github的登录页面<a class="reference external" href="https://github.com/login">https://github.com/login</a>，
+然后使用浏览器调试工具来得到登录时需要提交什么东西:</p>
+<p><img alt="image0" src="_images/scrapy01.png" /></p>
+<p>我这里使用chrome浏览器的调试工具，F12打开后选择Network，并将Preserve
+log勾上。
+我故意输入错误的用户名和密码，得到它提交的form表单参数还有POST提交的URL:</p>
+<p><img alt="image1" src="_images/scrapy02.png" /></p>
+<p>去查看html源码会发现表单里面有个隐藏的<code class="docutils literal notranslate"><span class="pre">authenticity_token</span></code>值，这个是需要先获取然后跟用户名和密码一起提交的:</p>
+<p><img alt="image2" src="_images/scrapy03.png" /></p>
+<div class="section" id="start-requests">
+<h2>重写start_requests方法<a class="headerlink" href="#start-requests" title="永久链接至标题">¶</a></h2>
+<p>要使用cookie，第一步得打开它呀，默认scrapy使用<code class="docutils literal notranslate"><span class="pre">CookiesMiddleware</span></code>中间件，并且打开了。如果你之前禁止过，请设置如下</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">COOKIES_ENABLES</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+</div>
+<p>我们先要打开登录页面，获取<code class="docutils literal notranslate"><span class="pre">authenticity_token</span></code>值，这里我重写了start_requests方法</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 重写了爬虫类的方法, 实现了自定义请求, 运行成功后会调用callback回调函数</span>
+<span class="k">def</span> <span class="nf">start_requests</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">Request</span><span class="p">(</span><span class="s2">&quot;https://github.com/login&quot;</span><span class="p">,</span>
+                    <span class="n">meta</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cookiejar&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span> <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">post_login</span><span class="p">)]</span>
+
+<span class="c1"># FormRequeset</span>
+<span class="k">def</span> <span class="nf">post_login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+    <span class="c1"># 先去拿隐藏的表单参数authenticity_token</span>
+    <span class="n">authenticity_token</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
+        <span class="s1">&#39;//input[@name=&quot;authenticity_token&quot;]/@value&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract_first</span><span class="p">()</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;authenticity_token=&#39;</span> <span class="o">+</span> <span class="n">authenticity_token</span><span class="p">)</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">start_requests</span></code>方法指定了回调函数，用来获取隐藏表单值<code class="docutils literal notranslate"><span class="pre">authenticity_token</span></code>，同时我们还给Request指定了<code class="docutils literal notranslate"><span class="pre">cookiejar</span></code>的元数据，用来往回调函数传递cookie标识。</p>
+</div>
+<div class="section" id="formrequest">
+<h2>使用FormRequest<a class="headerlink" href="#formrequest" title="永久链接至标题">¶</a></h2>
+<p>Scrapy为我们准备了<code class="docutils literal notranslate"><span class="pre">FormRequest</span></code>类专门用来进行Form表单提交的</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 为了模拟浏览器，我们定义httpheader</span>
+<span class="n">post_headers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Accept-Encoding&quot;</span><span class="p">:</span> <span class="s2">&quot;gzip, deflate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Accept-Language&quot;</span><span class="p">:</span> <span class="s2">&quot;zh-CN,zh;q=0.8,en;q=0.6&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Cache-Control&quot;</span><span class="p">:</span> <span class="s2">&quot;no-cache&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Connection&quot;</span><span class="p">:</span> <span class="s2">&quot;keep-alive&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/x-www-form-urlencoded&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;User-Agent&quot;</span><span class="p">:</span> <span class="s2">&quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Referer&quot;</span><span class="p">:</span> <span class="s2">&quot;https://github.com/&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="c1"># 使用FormRequeset模拟表单提交</span>
+<span class="k">def</span> <span class="nf">post_login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+    <span class="c1"># 先去拿隐藏的表单参数authenticity_token</span>
+    <span class="n">authenticity_token</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
+        <span class="s1">&#39;//input[@name=&quot;authenticity_token&quot;]/@value&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract_first</span><span class="p">()</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;authenticity_token=&#39;</span> <span class="o">+</span> <span class="n">authenticity_token</span><span class="p">)</span>
+    <span class="c1"># FormRequeset.from_response是Scrapy提供的一个函数, 用于post表单</span>
+    <span class="c1"># 登陆成功后, 会调用after_login回调函数，如果url跟Request页面的一样就省略掉</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">FormRequest</span><span class="o">.</span><span class="n">from_response</span><span class="p">(</span><span class="n">response</span><span class="p">,</span>
+                                      <span class="n">url</span><span class="o">=</span><span class="s1">&#39;https://github.com/session&#39;</span><span class="p">,</span>
+                                      <span class="n">meta</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cookiejar&#39;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;cookiejar&#39;</span><span class="p">]},</span>
+                                      <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">post_headers</span><span class="p">,</span>  <span class="c1"># 注意此处的headers</span>
+                                      <span class="n">formdata</span><span class="o">=</span><span class="p">{</span>
+                                          <span class="s1">&#39;utf8&#39;</span><span class="p">:</span> <span class="s1">&#39;✓&#39;</span><span class="p">,</span>
+                                          <span class="s1">&#39;login&#39;</span><span class="p">:</span> <span class="s1">&#39;yidao620c&#39;</span><span class="p">,</span>
+                                          <span class="s1">&#39;password&#39;</span><span class="p">:</span> <span class="s1">&#39;******&#39;</span><span class="p">,</span>
+                                          <span class="s1">&#39;authenticity_token&#39;</span><span class="p">:</span> <span class="n">authenticity_token</span>
+                                      <span class="p">},</span>
+                                      <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">after_login</span><span class="p">,</span>
+                                      <span class="n">dont_filter</span><span class="o">=</span><span class="bp">True</span>
+                                      <span class="p">)]</span>
+
+<span class="k">def</span> <span class="nf">after_login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">FormRequest.from_response()</span></code>方法让你指定提交的url，请求头还有form表单值，注意我们还通过<code class="docutils literal notranslate"><span class="pre">meta</span></code>传递了cookie标识。它同样有个回调函数，登录成功后调用。下面我们来实现它</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">after_login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+    <span class="c1"># 登录之后，开始进入我要爬取的私信页面</span>
+    <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_urls</span><span class="p">:</span>
+        <span class="c1"># 因为我们上面定义了Rule，所以只需要简单的生成初始爬取Request即可</span>
+        <span class="k">yield</span> <span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cookiejar&#39;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;cookiejar&#39;</span><span class="p">]})</span>
+</pre></div>
+</div>
+<p>这里我通过<code class="docutils literal notranslate"><span class="pre">start_urls</span></code>定义了开始页面，然后生成Request，具体爬取的规则和<code class="docutils literal notranslate"><span class="pre">下一页</span></code>规则在前面的Rule里定义了。注意这里我继续传递<code class="docutils literal notranslate"><span class="pre">cookiejar</span></code>，访问初始页面时带上cookie信息。</p>
+</div>
+<div class="section" id="requests-to-follow">
+<h2>重写_requests_to_follow<a class="headerlink" href="#requests-to-follow" title="永久链接至标题">¶</a></h2>
+<p>有个问题刚开始困扰我很久就是这里我定义的spider继承自CrawlSpider，它内部自动去下载匹配的链接，而每次去访问链接的时候并没有自动带上cookie，后来我重写了它的<code class="docutils literal notranslate"><span class="pre">_requests_to_follow()</span></code>方法解决了这个问题</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_requests_to_follow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;重写加入cookiejar的更新&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">HtmlResponse</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="n">seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">rule</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rules</span><span class="p">):</span>
+        <span class="n">links</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">rule</span><span class="o">.</span><span class="n">link_extractor</span><span class="o">.</span><span class="n">extract_links</span><span class="p">(</span><span class="n">response</span><span class="p">)</span> <span class="k">if</span> <span class="n">l</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">links</span> <span class="ow">and</span> <span class="n">rule</span><span class="o">.</span><span class="n">process_links</span><span class="p">:</span>
+            <span class="n">links</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="n">process_links</span><span class="p">(</span><span class="n">links</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
+            <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">link</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_response_downloaded</span><span class="p">)</span>
+            <span class="c1"># 下面这句是我重写的</span>
+            <span class="n">r</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">rule</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">link_text</span><span class="o">=</span><span class="n">link</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">cookiejar</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;cookiejar&#39;</span><span class="p">])</span>
+            <span class="k">yield</span> <span class="n">rule</span><span class="o">.</span><span class="n">process_request</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>页面处理方法<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
+<p>在规则Rule里面我定义了每个链接的回调函数<code class="docutils literal notranslate"><span class="pre">parse_page</span></code>，就是最终我们处理每个issue页面提取信息的逻辑</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">parse_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;这个是使用LinkExtractor自动处理链接以及`下一页`&quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;--------------消息分割线-----------------&#39;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">issue_title</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
+        <span class="s1">&#39;//span[@class=&quot;js-issue-title&quot;]/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract_first</span><span class="p">()</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;issue_title：&#39;</span> <span class="o">+</span> <span class="n">issue_title</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>完整源码<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- encoding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Topic: 登录爬虫</span>
+<span class="sd">Desc : 模拟登录https://github.com后将自己的issue全部爬出来</span>
+<span class="sd">tips：使用chrome调试post表单的时候勾选Preserve log和Disable cache</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">scrapy</span>
+<span class="kn">from</span> <span class="nn">scrapy.spiders</span> <span class="kn">import</span> <span class="n">CrawlSpider</span><span class="p">,</span> <span class="n">Rule</span>
+<span class="kn">from</span> <span class="nn">scrapy.linkextractors</span> <span class="kn">import</span> <span class="n">LinkExtractor</span>
+<span class="kn">from</span> <span class="nn">scrapy.http</span> <span class="kn">import</span> <span class="n">Request</span><span class="p">,</span> <span class="n">FormRequest</span><span class="p">,</span> <span class="n">HtmlResponse</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
+                    <span class="n">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(filename)s</span><span class="s1">[line:</span><span class="si">%(lineno)d</span><span class="s1">] </span><span class="si">%(levelname)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+                    <span class="n">datefmt</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">,</span>
+                    <span class="n">handlers</span><span class="o">=</span><span class="p">[</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)])</span>
+
+
+<span class="k">class</span> <span class="nc">GithubSpider</span><span class="p">(</span><span class="n">CrawlSpider</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;github&quot;</span>
+    <span class="n">allowed_domains</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;github.com&quot;</span><span class="p">]</span>
+    <span class="n">start_urls</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;https://github.com/issues&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">rules</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="c1"># 消息列表</span>
+        <span class="n">Rule</span><span class="p">(</span><span class="n">LinkExtractor</span><span class="p">(</span><span class="n">allow</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;/issues/\d+&#39;</span><span class="p">,),</span>
+                           <span class="n">restrict_xpaths</span><span class="o">=</span><span class="s1">&#39;//ul[starts-with(@class, &quot;table-list&quot;)]/li/div[2]/a[2]&#39;</span><span class="p">),</span>
+             <span class="n">callback</span><span class="o">=</span><span class="s1">&#39;parse_page&#39;</span><span class="p">),</span>
+        <span class="c1"># 下一页, If callback is None follow defaults to True, otherwise it defaults to False</span>
+        <span class="n">Rule</span><span class="p">(</span><span class="n">LinkExtractor</span><span class="p">(</span><span class="n">restrict_xpaths</span><span class="o">=</span><span class="s1">&#39;//a[@class=&quot;next_page&quot;]&#39;</span><span class="p">)),</span>
+    <span class="p">)</span>
+    <span class="n">post_headers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Accept-Encoding&quot;</span><span class="p">:</span> <span class="s2">&quot;gzip, deflate&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Accept-Language&quot;</span><span class="p">:</span> <span class="s2">&quot;zh-CN,zh;q=0.8,en;q=0.6&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Cache-Control&quot;</span><span class="p">:</span> <span class="s2">&quot;no-cache&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Connection&quot;</span><span class="p">:</span> <span class="s2">&quot;keep-alive&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/x-www-form-urlencoded&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;User-Agent&quot;</span><span class="p">:</span> <span class="s2">&quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Referer&quot;</span><span class="p">:</span> <span class="s2">&quot;https://github.com/&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="c1"># 重写了爬虫类的方法, 实现了自定义请求, 运行成功后会调用callback回调函数</span>
+    <span class="k">def</span> <span class="nf">start_requests</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Request</span><span class="p">(</span><span class="s2">&quot;https://github.com/login&quot;</span><span class="p">,</span>
+                        <span class="n">meta</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cookiejar&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span> <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">post_login</span><span class="p">)]</span>
+
+    <span class="c1"># FormRequeset</span>
+    <span class="k">def</span> <span class="nf">post_login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="c1"># 先去拿隐藏的表单参数authenticity_token</span>
+        <span class="n">authenticity_token</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
+            <span class="s1">&#39;//input[@name=&quot;authenticity_token&quot;]/@value&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract_first</span><span class="p">()</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;authenticity_token=&#39;</span> <span class="o">+</span> <span class="n">authenticity_token</span><span class="p">)</span>
+        <span class="c1"># FormRequeset.from_response是Scrapy提供的一个函数, 用于post表单</span>
+        <span class="c1"># 登陆成功后, 会调用after_login回调函数，如果url跟Request页面的一样就省略掉</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">FormRequest</span><span class="o">.</span><span class="n">from_response</span><span class="p">(</span><span class="n">response</span><span class="p">,</span>
+                                          <span class="n">url</span><span class="o">=</span><span class="s1">&#39;https://github.com/session&#39;</span><span class="p">,</span>
+                                          <span class="n">meta</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cookiejar&#39;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;cookiejar&#39;</span><span class="p">]},</span>
+                                          <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">post_headers</span><span class="p">,</span>  <span class="c1"># 注意此处的headers</span>
+                                          <span class="n">formdata</span><span class="o">=</span><span class="p">{</span>
+                                              <span class="s1">&#39;utf8&#39;</span><span class="p">:</span> <span class="s1">&#39;✓&#39;</span><span class="p">,</span>
+                                              <span class="s1">&#39;login&#39;</span><span class="p">:</span> <span class="s1">&#39;yidao620c&#39;</span><span class="p">,</span>
+                                              <span class="s1">&#39;password&#39;</span><span class="p">:</span> <span class="s1">&#39;******&#39;</span><span class="p">,</span>
+                                              <span class="s1">&#39;authenticity_token&#39;</span><span class="p">:</span> <span class="n">authenticity_token</span>
+                                          <span class="p">},</span>
+                                          <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">after_login</span><span class="p">,</span>
+                                          <span class="n">dont_filter</span><span class="o">=</span><span class="bp">True</span>
+                                          <span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">after_login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_urls</span><span class="p">:</span>
+            <span class="c1"># 因为我们上面定义了Rule，所以只需要简单的生成初始爬取Request即可</span>
+            <span class="k">yield</span> <span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cookiejar&#39;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;cookiejar&#39;</span><span class="p">]})</span>
+
+    <span class="k">def</span> <span class="nf">parse_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;这个是使用LinkExtractor自动处理链接以及`下一页`&quot;&quot;&quot;</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;--------------消息分割线-----------------&#39;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">issue_title</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
+            <span class="s1">&#39;//span[@class=&quot;js-issue-title&quot;]/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract_first</span><span class="p">()</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;issue_title：&#39;</span> <span class="o">+</span> <span class="n">issue_title</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_requests_to_follow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;重写加入cookiejar的更新&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">HtmlResponse</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="n">seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">rule</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rules</span><span class="p">):</span>
+            <span class="n">links</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">rule</span><span class="o">.</span><span class="n">link_extractor</span><span class="o">.</span><span class="n">extract_links</span><span class="p">(</span><span class="n">response</span><span class="p">)</span> <span class="k">if</span> <span class="n">l</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">links</span> <span class="ow">and</span> <span class="n">rule</span><span class="o">.</span><span class="n">process_links</span><span class="p">:</span>
+                <span class="n">links</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="n">process_links</span><span class="p">(</span><span class="n">links</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
+                <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">link</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_response_downloaded</span><span class="p">)</span>
+                <span class="c1"># 下面这句是我重写的</span>
+                <span class="n">r</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">rule</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">link_text</span><span class="o">=</span><span class="n">link</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">cookiejar</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;cookiejar&#39;</span><span class="p">])</span>
+                <span class="k">yield</span> <span class="n">rule</span><span class="o">.</span><span class="n">process_request</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>你可以在<a class="reference external" href="https://github.com/yidao620c/core-scrapy">GitHub</a>上看到本文的完整项目源码，还有另外一个自动登陆iteye网站的例子。</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="scrapy-12.html" class="btn btn-neutral float-right" title="Scrapy教程12- 抓取动态网站" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="scrapy-10.html" class="btn btn-neutral float-left" title="Scrapy教程10- 动态配置爬虫" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Xiong Neng
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

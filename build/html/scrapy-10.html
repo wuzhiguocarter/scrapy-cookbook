@@ -1,0 +1,510 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Scrapy教程10- 动态配置爬虫 &mdash; scrapy-cookbook 0.2.2 文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="Scrapy教程11- 模拟登录" href="scrapy-11.html" />
+    <link rel="prev" title="Scrapy教程09- 部署" href="scrapy-09.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> scrapy-cookbook
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="scrapy-01.html">Scrapy教程01- 入门篇</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-02.html">Scrapy教程02- 完整示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-03.html">Scrapy教程03- Spider详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-04.html">Scrapy教程04- Selector详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-05.html">Scrapy教程05- Item详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-06.html">Scrapy教程06- Item Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-07.html">Scrapy教程07- 内置服务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-08.html">Scrapy教程08- 文件与图片</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-09.html">Scrapy教程09- 部署</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Scrapy教程10- 动态配置爬虫</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#scrapy">脚本运行Scrapy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spider">同一进程运行多个spider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">定义规则表</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#item">定义文章Item</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#articlespider">定义ArticleSpider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pipeline">编写pipeline存储到数据库中</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-py">修改run.py启动脚本</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-11.html">Scrapy教程11- 模拟登录</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-12.html">Scrapy教程12- 抓取动态网站</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other/about.html">联系我</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scrapy-cookbook</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Scrapy教程10- 动态配置爬虫</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/scrapy-10.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="scrapy10">
+<h1>Scrapy教程10- 动态配置爬虫<a class="headerlink" href="#scrapy10" title="永久链接至标题">¶</a></h1>
+<p>有很多时候我们需要从多个网站爬取所需要的数据，比如我们想爬取多个网站的新闻，将其存储到数据库同一个表中。我们是不是要对每个网站都得去定义一个Spider类呢？
+其实不需要，我们可以通过维护一个规则配置表或者一个规则配置文件来动态增加或修改爬取规则，然后程序代码不需要更改就能实现多个网站爬取。</p>
+<p>要这样做，我们就不能再使用前面的<code class="docutils literal notranslate"><span class="pre">scrapy</span> <span class="pre">crawl</span> <span class="pre">test</span></code>这种命令了，我们需要使用编程的方式运行Scrapy
+spider，参考<a class="reference external" href="http://doc.scrapy.org/en/1.0/topics/practices.html#run-scrapy-from-a-script">官方文档</a></p>
+<div class="section" id="scrapy">
+<h2>脚本运行Scrapy<a class="headerlink" href="#scrapy" title="永久链接至标题">¶</a></h2>
+<p>可以利用scrapy提供的<a class="reference external" href="http://doc.scrapy.org/en/1.0/topics/api.html#topics-api">核心API</a>通过编程方式启动scrapy，代替传统的<code class="docutils literal notranslate"><span class="pre">scrapy</span> <span class="pre">crawl</span></code>启动方式。</p>
+<p>Scrapy构建于Twisted异步网络框架基础之上，因此你需要在Twisted
+reactor里面运行。</p>
+<p>首先你可以使用<code class="docutils literal notranslate"><span class="pre">scrapy.crawler.CrawlerProcess</span></code>这个类来运行你的spider，这个类会为你启动一个Twisted
+reactor，并能配置你的日志和shutdown处理器。所有的scrapy命令都使用这个类。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scrapy</span>
+<span class="kn">from</span> <span class="nn">scrapy.crawler</span> <span class="kn">import</span> <span class="n">CrawlerProcess</span>
+<span class="kn">from</span> <span class="nn">scrapy.utils.project</span> <span class="kn">import</span> <span class="n">get_project_settings</span>
+
+<span class="n">process</span> <span class="o">=</span> <span class="n">CrawlerProcess</span><span class="p">(</span><span class="n">get_project_settings</span><span class="p">())</span>
+
+<span class="n">process</span><span class="o">.</span><span class="n">crawl</span><span class="p">(</span><span class="n">MySpider</span><span class="p">)</span>
+<span class="n">process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="c1"># the script will block here until the crawling is finished</span>
+</pre></div>
+</div>
+<p>然后你就可以直接执行这个脚本</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python run.py
+</pre></div>
+</div>
+<p>另外一个功能更强大的类是<code class="docutils literal notranslate"><span class="pre">scrapy.crawler.CrawlerRunner</span></code>，推荐你使用这个</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">reactor</span>
+<span class="kn">import</span> <span class="nn">scrapy</span>
+<span class="kn">from</span> <span class="nn">scrapy.crawler</span> <span class="kn">import</span> <span class="n">CrawlerRunner</span>
+<span class="kn">from</span> <span class="nn">scrapy.utils.log</span> <span class="kn">import</span> <span class="n">configure_logging</span>
+
+<span class="k">class</span> <span class="nc">MySpider</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Spider</span><span class="p">):</span>
+    <span class="c1"># Your spider definition</span>
+    <span class="o">...</span>
+
+<span class="n">configure_logging</span><span class="p">({</span><span class="s1">&#39;LOG_FORMAT&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">%(levelname)s</span><span class="s1">: </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">})</span>
+<span class="n">runner</span> <span class="o">=</span> <span class="n">CrawlerRunner</span><span class="p">()</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">crawl</span><span class="p">(</span><span class="n">MySpider</span><span class="p">)</span>
+<span class="n">d</span><span class="o">.</span><span class="n">addBoth</span><span class="p">(</span><span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="n">reactor</span><span class="o">.</span><span class="n">stop</span><span class="p">())</span>
+<span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">()</span> <span class="c1"># the script will block here until the crawling is finished</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="spider">
+<h2>同一进程运行多个spider<a class="headerlink" href="#spider" title="永久链接至标题">¶</a></h2>
+<p>默认情况当你每次执行<code class="docutils literal notranslate"><span class="pre">scrapy</span> <span class="pre">crawl</span></code>命令时会创建一个新的进程。但我们可以使用核心API在同一个进程中同时运行多个spider</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scrapy</span>
+<span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">reactor</span>
+<span class="kn">from</span> <span class="nn">scrapy.crawler</span> <span class="kn">import</span> <span class="n">CrawlerRunner</span>
+<span class="kn">from</span> <span class="nn">scrapy.utils.log</span> <span class="kn">import</span> <span class="n">configure_logging</span>
+
+<span class="k">class</span> <span class="nc">MySpider1</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Spider</span><span class="p">):</span>
+    <span class="c1"># Your first spider definition</span>
+    <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">MySpider2</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Spider</span><span class="p">):</span>
+    <span class="c1"># Your second spider definition</span>
+    <span class="o">...</span>
+
+<span class="n">configure_logging</span><span class="p">()</span>
+<span class="n">runner</span> <span class="o">=</span> <span class="n">CrawlerRunner</span><span class="p">()</span>
+<span class="n">runner</span><span class="o">.</span><span class="n">crawl</span><span class="p">(</span><span class="n">MySpider1</span><span class="p">)</span>
+<span class="n">runner</span><span class="o">.</span><span class="n">crawl</span><span class="p">(</span><span class="n">MySpider2</span><span class="p">)</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+<span class="n">d</span><span class="o">.</span><span class="n">addBoth</span><span class="p">(</span><span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="n">reactor</span><span class="o">.</span><span class="n">stop</span><span class="p">())</span>
+
+<span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">()</span> <span class="c1"># the script will block here until all crawling jobs are finished</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>定义规则表<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
+<p>好了言归正传，有了前面的脚本启动基础，就可以开始我们的动态配置爬虫了。
+我们的需求是这样的，从两个不同的网站爬取我们所需要的新闻文章，然后存储到article表中。</p>
+<p>首先我们需要定义规则表和文章表，通过动态的创建蜘蛛类，我们以后就只需要维护规则表即可了。这里我使用SQLAlchemy框架来映射数据库。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- encoding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Topic: 定义数据库模型实体</span>
+<span class="sd">Desc :</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="kn">from</span> <span class="nn">sqlalchemy.engine.url</span> <span class="kn">import</span> <span class="n">URL</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">declarative_base</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span><span class="p">,</span> <span class="n">Column</span><span class="p">,</span> <span class="n">Integer</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Text</span><span class="p">,</span> <span class="n">DateTime</span>
+<span class="kn">from</span> <span class="nn">coolscrapy.settings</span> <span class="kn">import</span> <span class="n">DATABASE</span>
+
+<span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">ArticleRule</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;自定义文章爬取规则&quot;&quot;&quot;</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;article_rule&#39;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="c1"># 规则名称</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+    <span class="c1"># 运行的域名列表，逗号隔开</span>
+    <span class="n">allow_domains</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
+    <span class="c1"># 开始URL列表，逗号隔开</span>
+    <span class="n">start_urls</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
+    <span class="c1"># 下一页的xpath</span>
+    <span class="n">next_page</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
+    <span class="c1"># 文章链接正则表达式(子串)</span>
+    <span class="n">allow_url</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">200</span><span class="p">))</span>
+    <span class="c1"># 文章链接提取区域xpath</span>
+    <span class="n">extract_from</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">200</span><span class="p">))</span>
+    <span class="c1"># 文章标题xpath</span>
+    <span class="n">title_xpath</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
+    <span class="c1"># 文章内容xpath</span>
+    <span class="n">body_xpath</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Text</span><span class="p">)</span>
+    <span class="c1"># 发布时间xpath</span>
+    <span class="n">publish_time_xpath</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+    <span class="c1"># 文章来源</span>
+    <span class="n">source_site</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+    <span class="c1"># 规则是否生效</span>
+    <span class="n">enable</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;文章类&quot;&quot;&quot;</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;articles&#39;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Text</span><span class="p">)</span>
+    <span class="n">publish_time</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+    <span class="n">source_site</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="item">
+<h2>定义文章Item<a class="headerlink" href="#item" title="永久链接至标题">¶</a></h2>
+<p>这个很简单了，没什么需要说明的</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scrapy</span>
+
+
+<span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+    <span class="n">publish_time</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+    <span class="n">source_site</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="articlespider">
+<h2>定义ArticleSpider<a class="headerlink" href="#articlespider" title="永久链接至标题">¶</a></h2>
+<p>接下来我们将定义爬取文章的蜘蛛，这个spider会使用一个Rule实例来初始化，然后根据Rule实例中的xpath规则来获取相应的数据。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">coolscrapy.utils</span> <span class="kn">import</span> <span class="n">parse_text</span>
+<span class="kn">from</span> <span class="nn">scrapy.spiders</span> <span class="kn">import</span> <span class="n">CrawlSpider</span><span class="p">,</span> <span class="n">Rule</span>
+<span class="kn">from</span> <span class="nn">scrapy.linkextractors</span> <span class="kn">import</span> <span class="n">LinkExtractor</span>
+<span class="kn">from</span> <span class="nn">coolscrapy.items</span> <span class="kn">import</span> <span class="n">Article</span>
+
+
+<span class="k">class</span> <span class="nc">ArticleSpider</span><span class="p">(</span><span class="n">CrawlSpider</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rule</span> <span class="o">=</span> <span class="n">rule</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">allowed_domains</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="n">allow_domains</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_urls</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="n">start_urls</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+        <span class="n">rule_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># 添加`下一页`的规则</span>
+        <span class="k">if</span> <span class="n">rule</span><span class="o">.</span><span class="n">next_page</span><span class="p">:</span>
+            <span class="n">rule_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Rule</span><span class="p">(</span><span class="n">LinkExtractor</span><span class="p">(</span><span class="n">restrict_xpaths</span><span class="o">=</span><span class="n">rule</span><span class="o">.</span><span class="n">next_page</span><span class="p">)))</span>
+        <span class="c1"># 添加抽取文章链接的规则</span>
+        <span class="n">rule_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Rule</span><span class="p">(</span><span class="n">LinkExtractor</span><span class="p">(</span>
+            <span class="n">allow</span><span class="o">=</span><span class="p">[</span><span class="n">rule</span><span class="o">.</span><span class="n">allow_url</span><span class="p">],</span>
+            <span class="n">restrict_xpaths</span><span class="o">=</span><span class="p">[</span><span class="n">rule</span><span class="o">.</span><span class="n">extract_from</span><span class="p">]),</span>
+            <span class="n">callback</span><span class="o">=</span><span class="s1">&#39;parse_item&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rules</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">rule_list</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ArticleSpider</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">parse_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Hi, this is an article page! </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">response</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+
+        <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">()</span>
+        <span class="n">article</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">url</span>
+
+        <span class="n">title</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rule</span><span class="o">.</span><span class="n">title_xpath</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+        <span class="n">article</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">parse_text</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rule</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">)</span>
+
+        <span class="n">body</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rule</span><span class="o">.</span><span class="n">body_xpath</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+        <span class="n">article</span><span class="p">[</span><span class="s2">&quot;body&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">parse_text</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rule</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;body&#39;</span><span class="p">)</span>
+
+        <span class="n">publish_time</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rule</span><span class="o">.</span><span class="n">publish_time_xpath</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+        <span class="n">article</span><span class="p">[</span><span class="s2">&quot;publish_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">parse_text</span><span class="p">(</span><span class="n">publish_time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rule</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;publish_time&#39;</span><span class="p">)</span>
+
+        <span class="n">article</span><span class="p">[</span><span class="s2">&quot;source_site&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rule</span><span class="o">.</span><span class="n">source_site</span>
+
+        <span class="k">return</span> <span class="n">article</span>
+</pre></div>
+</div>
+<p>要注意的是start_urls，rules等都初始化成了对象的属性，都由传入的rule对象初始化，parse_item方法中的抽取规则也都有rule对象提供。</p>
+</div>
+<div class="section" id="pipeline">
+<h2>编写pipeline存储到数据库中<a class="headerlink" href="#pipeline" title="永久链接至标题">¶</a></h2>
+<p>我们还是使用SQLAlchemy来将文章Item数据存储到数据库中</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">session_scope</span><span class="p">(</span><span class="n">Session</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Provide a transactional scope around a series of operations.&quot;&quot;&quot;</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">session</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">raise</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">ArticleDataBasePipeline</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;保存文章到数据库&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">db_connect</span><span class="p">()</span>
+        <span class="n">create_news_table</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Session</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">open_spider</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This method is called when the spider is opened.&quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">process_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">Article</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">],</span>
+                    <span class="n">title</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span>
+                    <span class="n">publish_time</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;publish_time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span>
+                    <span class="n">body</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;body&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span>
+                    <span class="n">source_site</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;source_site&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+        <span class="k">with</span> <span class="n">session_scope</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Session</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+            <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">close_spider</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="run-py">
+<h2>修改run.py启动脚本<a class="headerlink" href="#run-py" title="永久链接至标题">¶</a></h2>
+<p>我们将上面的run.py稍作修改即可定制我们的文章爬虫启动脚本</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">spiders.article_spider</span> <span class="kn">import</span> <span class="n">ArticleSpider</span>
+<span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">reactor</span>
+<span class="kn">from</span> <span class="nn">scrapy.crawler</span> <span class="kn">import</span> <span class="n">CrawlerRunner</span>
+<span class="kn">from</span> <span class="nn">scrapy.utils.project</span> <span class="kn">import</span> <span class="n">get_project_settings</span>
+<span class="kn">from</span> <span class="nn">scrapy.utils.log</span> <span class="kn">import</span> <span class="n">configure_logging</span>
+<span class="kn">from</span> <span class="nn">coolscrapy.models</span> <span class="kn">import</span> <span class="n">db_connect</span>
+<span class="kn">from</span> <span class="nn">coolscrapy.models</span> <span class="kn">import</span> <span class="n">ArticleRule</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">sessionmaker</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">settings</span> <span class="o">=</span> <span class="n">get_project_settings</span><span class="p">()</span>
+    <span class="n">configure_logging</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">db_connect</span><span class="p">()</span>
+    <span class="n">Session</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">()</span>
+    <span class="n">rules</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">ArticleRule</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">ArticleRule</span><span class="o">.</span><span class="n">enable</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">runner</span> <span class="o">=</span> <span class="n">CrawlerRunner</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">rules</span><span class="p">:</span>
+        <span class="c1"># stop reactor when spider closes</span>
+        <span class="c1"># runner.signals.connect(spider_closing, signal=signals.spider_closed)</span>
+        <span class="n">runner</span><span class="o">.</span><span class="n">crawl</span><span class="p">(</span><span class="n">ArticleSpider</span><span class="p">,</span> <span class="n">rule</span><span class="o">=</span><span class="n">rule</span><span class="p">)</span>
+
+    <span class="n">d</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+    <span class="n">d</span><span class="o">.</span><span class="n">addBoth</span><span class="p">(</span><span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="n">reactor</span><span class="o">.</span><span class="n">stop</span><span class="p">())</span>
+
+    <span class="c1"># blocks process so always keep as the last statement</span>
+    <span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;all finished.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>OK，一切搞定。现在我们可以往ArticleRule表中加入成百上千个网站的规则，而不用添加一行代码，就可以对这成百上千个网站进行爬取。
+当然你完全可以做一个Web前端来完成维护ArticleRule表的任务。当然ArticleRule规则也可以放在除了数据库的任何地方，比如配置文件。</p>
+<p>你可以在<a class="reference external" href="https://github.com/yidao620c/core-scrapy">GitHub</a>上看到本文的完整项目源码。</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="scrapy-11.html" class="btn btn-neutral float-right" title="Scrapy教程11- 模拟登录" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="scrapy-09.html" class="btn btn-neutral float-left" title="Scrapy教程09- 部署" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Xiong Neng
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

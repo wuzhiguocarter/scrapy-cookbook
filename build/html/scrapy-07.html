@@ -1,0 +1,330 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Scrapy教程07- 内置服务 &mdash; scrapy-cookbook 0.2.2 文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="Scrapy教程08- 文件与图片" href="scrapy-08.html" />
+    <link rel="prev" title="Scrapy教程06- Item Pipeline" href="scrapy-06.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> scrapy-cookbook
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="scrapy-01.html">Scrapy教程01- 入门篇</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-02.html">Scrapy教程02- 完整示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-03.html">Scrapy教程03- Spider详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-04.html">Scrapy教程04- Selector详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-05.html">Scrapy教程05- Item详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-06.html">Scrapy教程06- Item Pipeline</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Scrapy教程07- 内置服务</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#email">发送email</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spider">同一个进程运行多个Spider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">分布式爬虫</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">防止被封的策略</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-08.html">Scrapy教程08- 文件与图片</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-09.html">Scrapy教程09- 部署</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-10.html">Scrapy教程10- 动态配置爬虫</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-11.html">Scrapy教程11- 模拟登录</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-12.html">Scrapy教程12- 抓取动态网站</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other/about.html">联系我</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scrapy-cookbook</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Scrapy教程07- 内置服务</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/scrapy-07.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="scrapy07">
+<h1>Scrapy教程07- 内置服务<a class="headerlink" href="#scrapy07" title="永久链接至标题">¶</a></h1>
+<p>Scrapy使用Python内置的的日志系统来记录事件日志。 日志配置</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">LOG_ENABLED</span> <span class="o">=</span> <span class="n">true</span>
+<span class="n">LOG_ENCODING</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span>
+<span class="n">LOG_LEVEL</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span>
+<span class="n">LOG_FILE</span> <span class="o">=</span> <span class="s2">&quot;log/spider.log&quot;</span>
+<span class="n">LOG_STDOUT</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">LOG_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> [</span><span class="si">%(name)s</span><span class="s2">] </span><span class="si">%(levelname)s</span><span class="s2">: </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
+<span class="n">LOG_DATEFORMAT</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span>
+</pre></div>
+</div>
+<p>使用也很简单</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;This is a warning&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>如果在Spider里面使用，那就更简单了，因为logger就是它的一个实例变量</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scrapy</span>
+
+<span class="k">class</span> <span class="nc">MySpider</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Spider</span><span class="p">):</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;myspider&#39;</span>
+    <span class="n">start_urls</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;http://scrapinghub.com&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Parse function called on </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="email">
+<h2>发送email<a class="headerlink" href="#email" title="永久链接至标题">¶</a></h2>
+<p>Scrapy发送email基于<a class="reference external" href="http://twistedmatrix.com/documents/current/core/howto/defer-intro.html">Twisted non-blocking
+IO</a>实现，只需几个简单配置即可。</p>
+<p>初始化</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mailer</span> <span class="o">=</span> <span class="n">MailSender</span><span class="o">.</span><span class="n">from_settings</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>发送不包含附件</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mailer</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">to</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;someone@example.com&quot;</span><span class="p">],</span> <span class="n">subject</span><span class="o">=</span><span class="s2">&quot;Some subject&quot;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="s2">&quot;Some body&quot;</span><span class="p">,</span> <span class="n">cc</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;another@example.com&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>配置</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MAIL_FROM</span> <span class="o">=</span> <span class="s1">&#39;scrapy@localhost&#39;</span>
+<span class="n">MAIL_HOST</span> <span class="o">=</span> <span class="s1">&#39;localhost&#39;</span>
+<span class="n">MAIL_PORT</span> <span class="o">=</span> <span class="mi">25</span>
+<span class="n">MAIL_USER</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">MAIL_PASS</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">MAIL_TLS</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">MAIL_SSL</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="spider">
+<h2>同一个进程运行多个Spider<a class="headerlink" href="#spider" title="永久链接至标题">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scrapy</span>
+<span class="kn">from</span> <span class="nn">scrapy.crawler</span> <span class="kn">import</span> <span class="n">CrawlerProcess</span>
+
+<span class="k">class</span> <span class="nc">MySpider1</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Spider</span><span class="p">):</span>
+    <span class="c1"># Your first spider definition</span>
+    <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">MySpider2</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Spider</span><span class="p">):</span>
+    <span class="c1"># Your second spider definition</span>
+    <span class="o">...</span>
+
+<span class="n">process</span> <span class="o">=</span> <span class="n">CrawlerProcess</span><span class="p">()</span>
+<span class="n">process</span><span class="o">.</span><span class="n">crawl</span><span class="p">(</span><span class="n">MySpider1</span><span class="p">)</span>
+<span class="n">process</span><span class="o">.</span><span class="n">crawl</span><span class="p">(</span><span class="n">MySpider2</span><span class="p">)</span>
+<span class="n">process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="c1"># the script will block here until all crawling jobs are finished</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>分布式爬虫<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
+<p>Scrapy并没有提供内置的分布式抓取功能，不过有很多方法可以帮你实现。</p>
+<p>如果你有很多个spider，最简单的方式就是启动多个<code class="docutils literal notranslate"><span class="pre">Scrapyd</span></code>实例，然后将spider分布到各个机器上面。</p>
+<p>如果你想多个机器运行同一个spider，可以将url分片后交给每个机器上面的spider。比如你把URL分成3份</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">somedomain</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">urls</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">crawl</span><span class="o">/</span><span class="n">spider1</span><span class="o">/</span><span class="n">part1</span><span class="o">.</span><span class="n">list</span>
+<span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">somedomain</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">urls</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">crawl</span><span class="o">/</span><span class="n">spider1</span><span class="o">/</span><span class="n">part2</span><span class="o">.</span><span class="n">list</span>
+<span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">somedomain</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">urls</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">crawl</span><span class="o">/</span><span class="n">spider1</span><span class="o">/</span><span class="n">part3</span><span class="o">.</span><span class="n">list</span>
+</pre></div>
+</div>
+<p>然后运行3个<code class="docutils literal notranslate"><span class="pre">Scrapyd</span></code>实例，分别启动它们，并传递part参数</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">scrapy1</span><span class="o">.</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="mi">6800</span><span class="o">/</span><span class="n">schedule</span><span class="o">.</span><span class="n">json</span> <span class="o">-</span><span class="n">d</span> <span class="n">project</span><span class="o">=</span><span class="n">myproject</span> <span class="o">-</span><span class="n">d</span> <span class="n">spider</span><span class="o">=</span><span class="n">spider1</span> <span class="o">-</span><span class="n">d</span> <span class="n">part</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">curl</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">scrapy2</span><span class="o">.</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="mi">6800</span><span class="o">/</span><span class="n">schedule</span><span class="o">.</span><span class="n">json</span> <span class="o">-</span><span class="n">d</span> <span class="n">project</span><span class="o">=</span><span class="n">myproject</span> <span class="o">-</span><span class="n">d</span> <span class="n">spider</span><span class="o">=</span><span class="n">spider1</span> <span class="o">-</span><span class="n">d</span> <span class="n">part</span><span class="o">=</span><span class="mi">2</span>
+<span class="n">curl</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">scrapy3</span><span class="o">.</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="mi">6800</span><span class="o">/</span><span class="n">schedule</span><span class="o">.</span><span class="n">json</span> <span class="o">-</span><span class="n">d</span> <span class="n">project</span><span class="o">=</span><span class="n">myproject</span> <span class="o">-</span><span class="n">d</span> <span class="n">spider</span><span class="o">=</span><span class="n">spider1</span> <span class="o">-</span><span class="n">d</span> <span class="n">part</span><span class="o">=</span><span class="mi">3</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>防止被封的策略<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<p>一些网站实现了一些策略来禁止爬虫来爬取它们的网页。有的比较简单，有的相当复杂，如果你需要详细了解可以咨询<a class="reference external" href="http://scrapy.org/support/">商业支持</a></p>
+<p>下面是对于这些网站的一些有用的建议：</p>
+<ul class="simple">
+<li><p>使用user
+agent池。也就是每次发送的时候随机从池中选择不一样的浏览器头信息，防止暴露爬虫身份</p></li>
+<li><p>禁止Cookie，某些网站会通过Cookie识别用户身份，禁用后使得服务器无法识别爬虫轨迹</p></li>
+<li><p>设置download_delay下载延迟，数字设置为5秒，越大越安全</p></li>
+<li><p>如果有可能的话尽量使用<a class="reference external" href="http://www.googleguide.com/cached_pages.html">Google
+cache</a>获取网页，而不是直接访问</p></li>
+<li><p>使用一个轮转IP池，例如免费的<a class="reference external" href="https://www.torproject.org/">Tor
+project</a>或者是付费的<a class="reference external" href="http://proxymesh.com/">ProxyMesh</a></p></li>
+<li><p>使用大型分布式下载器，这样就能完全避免被封了，只需要关注怎样解析页面就行。一个例子就是<a class="reference external" href="http://scrapinghub.com/crawlera">Crawlera</a></p></li>
+</ul>
+<p>如果这些还是无法避免被禁，可以考虑<a class="reference external" href="http://scrapy.org/support/">商业支持</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="scrapy-08.html" class="btn btn-neutral float-right" title="Scrapy教程08- 文件与图片" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="scrapy-06.html" class="btn btn-neutral float-left" title="Scrapy教程06- Item Pipeline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Xiong Neng
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

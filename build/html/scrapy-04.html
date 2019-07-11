@@ -1,0 +1,436 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Scrapy教程04- Selector详解 &mdash; scrapy-cookbook 0.2.2 文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="Scrapy教程05- Item详解" href="scrapy-05.html" />
+    <link rel="prev" title="Scrapy教程03- Spider详解" href="scrapy-03.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> scrapy-cookbook
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="scrapy-01.html">Scrapy教程01- 入门篇</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-02.html">Scrapy教程02- 完整示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-03.html">Scrapy教程03- Spider详解</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Scrapy教程04- Selector详解</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">关于选择器</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">使用选择器</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">嵌套选择器</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">使用正则表达式</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#xpath">XPath相对路径</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">XPath建议</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#text">使用text作为条件时</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#node-1-node-1">//node[1]和(//node)[1]区别</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#classcss">通过class查找时优先考虑CSS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-05.html">Scrapy教程05- Item详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-06.html">Scrapy教程06- Item Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-07.html">Scrapy教程07- 内置服务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-08.html">Scrapy教程08- 文件与图片</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-09.html">Scrapy教程09- 部署</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-10.html">Scrapy教程10- 动态配置爬虫</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-11.html">Scrapy教程11- 模拟登录</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-12.html">Scrapy教程12- 抓取动态网站</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other/about.html">联系我</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scrapy-cookbook</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Scrapy教程04- Selector详解</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/scrapy-04.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="scrapy04-selector">
+<h1>Scrapy教程04- Selector详解<a class="headerlink" href="#scrapy04-selector" title="永久链接至标题">¶</a></h1>
+<p>在你爬取网页的时候，最普遍的事情就是在页面源码中提取需要的数据，我们有几个库可以帮你完成这个任务：</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="http://www.crummy.com/software/BeautifulSoup/">BeautifulSoup</a>是python中一个非常流行的抓取库,
+它还能合理的处理错误格式的标签，但是有一个唯一缺点就是：它运行很慢。</p></li>
+<li><p><a class="reference external" href="http://lxml.de/">lxml</a>是一个基于<a class="reference external" href="https://docs.python.org/2/library/xml.etree.elementtree.html">ElementTree</a>的XML解析库(同时还能解析HTML),
+不过lxml并不是Python标准库</p></li>
+</ol>
+<p>而Scrapy实现了自己的数据提取机制，它们被称为选择器，通过<a class="reference external" href="http://www.w3.org/TR/xpath">XPath</a>或<a class="reference external" href="http://www.w3.org/TR/selectors">CSS</a>表达式在HTML文档中来选择特定的部分</p>
+<p><a class="reference external" href="http://www.w3.org/TR/xpath">XPath</a>是一用来在XML中选择节点的语言，同时可以用在HTML上面。
+<a class="reference external" href="http://www.w3.org/TR/selectors">CSS</a>是一种HTML文档上面的样式语言。</p>
+<p>Scrapy选择器构建在lxml基础之上，所以可以保证速度和准确性。</p>
+<p>本章我们来详细讲解下选择器的工作原理，还有它们极其简单和相似的API，比lxml的API少多了，因为lxml可以用于很多其他领域。</p>
+<p>完整的API请查看<a class="reference external" href="http://doc.scrapy.org/en/latest/topics/selectors.html#topics-selectors-ref">Selector参考</a></p>
+<div class="section" id="id1">
+<h2>关于选择器<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
+<p>Scrapy帮我们下载完页面后，我们怎样在满是html标签的内容中找到我们所需要的元素呢，这里就需要使用到选择器了，它们是用来定位元素并且提取元素的值。先来举几个例子看看：</p>
+<ul>
+<li><p>/html/head/title: 选择<code class="docutils literal notranslate"><span class="pre">&lt;title&gt;</span></code>节点,
+它位于html文档的<code class="docutils literal notranslate"><span class="pre">&lt;head&gt;</span></code>节点内</p></li>
+<li><p>/html/head/title/text(): 选择上面的<code class="docutils literal notranslate"><span class="pre">&lt;title&gt;</span></code>节点的内容.</p></li>
+<li><p>//td: 选择页面中所有的</p>
+<td><p>元素</p>
+</li>
+<li><p>//div[&#64;class=”mine”]: 选择所有拥有属性<code class="docutils literal notranslate"><span class="pre">class=&quot;mine&quot;</span></code>的div元素</p></li>
+</ul>
+<p>Scrapy使用css和xpath选择器来定位元素，它有四个基本方法：</p>
+<ul class="simple">
+<li><p>xpath(): 返回选择器列表，每个选择器代表使用xpath语法选择的节点</p></li>
+<li><p>css(): 返回选择器列表，每个选择器代表使用css语法选择的节点</p></li>
+<li><p>extract(): 返回被选择元素的unicode字符串</p></li>
+<li><p>re(): 返回通过正则表达式提取的unicode字符串列表</p></li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h2>使用选择器<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<p>下面我们通过Scrapy
+shell演示下选择器的使用，假设我们有如下的一个网页<a class="reference external" href="http://doc.scrapy.org/en/latest/_static/selectors-sample1.html">http://doc.scrapy.org/en/latest/_static/selectors-sample1.html</a>，内容如下：</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+ <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">base</span> <span class="na">href</span><span class="o">=</span><span class="s">&#39;http://example.com/&#39;</span> <span class="p">/&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Example website<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+ <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+ <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#39;images&#39;</span><span class="p">&gt;</span>
+   <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#39;image1.html&#39;</span><span class="p">&gt;</span>Name: My image 1 <span class="p">&lt;</span><span class="nt">br</span> <span class="p">/&gt;&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#39;image1_thumb.jpg&#39;</span> <span class="p">/&gt;&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+   <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#39;image2.html&#39;</span><span class="p">&gt;</span>Name: My image 2 <span class="p">&lt;</span><span class="nt">br</span> <span class="p">/&gt;&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#39;image2_thumb.jpg&#39;</span> <span class="p">/&gt;&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+   <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#39;image3.html&#39;</span><span class="p">&gt;</span>Name: My image 3 <span class="p">&lt;</span><span class="nt">br</span> <span class="p">/&gt;&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#39;image3_thumb.jpg&#39;</span> <span class="p">/&gt;&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+   <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#39;image4.html&#39;</span><span class="p">&gt;</span>Name: My image 4 <span class="p">&lt;</span><span class="nt">br</span> <span class="p">/&gt;&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#39;image4_thumb.jpg&#39;</span> <span class="p">/&gt;&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+   <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#39;image5.html&#39;</span><span class="p">&gt;</span>Name: My image 5 <span class="p">&lt;</span><span class="nt">br</span> <span class="p">/&gt;&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#39;image5_thumb.jpg&#39;</span> <span class="p">/&gt;&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+ <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>首先我们打开shell</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>scrapy shell http://doc.scrapy.org/en/latest/_static/selectors-sample1.html
+</pre></div>
+</div>
+<p>运行</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//title/text()&#39;</span><span class="p">)</span>
+<span class="go">[&lt;Selector (text) xpath=//title/text()&gt;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;title::text&#39;</span><span class="p">)</span>
+<span class="go">[&lt;Selector (text) xpath=//title/text()&gt;]</span>
+</pre></div>
+</div>
+<p>结果可以看出,<code class="docutils literal notranslate"><span class="pre">xpath()</span></code>和<code class="docutils literal notranslate"><span class="pre">css()</span></code>方法返回的是<code class="docutils literal notranslate"><span class="pre">SelectorList</span></code>实例，是一个选择器列表，你可以选择嵌套的数据：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;@src&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+<span class="go">[u&#39;image1_thumb.jpg&#39;,</span>
+<span class="go"> u&#39;image2_thumb.jpg&#39;,</span>
+<span class="go"> u&#39;image3_thumb.jpg&#39;,</span>
+<span class="go"> u&#39;image4_thumb.jpg&#39;,</span>
+<span class="go"> u&#39;image5_thumb.jpg&#39;]</span>
+</pre></div>
+</div>
+<p>必须使用<code class="docutils literal notranslate"><span class="pre">.extract()</span></code>才能提取最终的数据，如果你只想获得第一个匹配的，可以使用<code class="docutils literal notranslate"><span class="pre">.extract_first()</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//div[@id=&quot;images&quot;]/a/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract_first</span><span class="p">()</span>
+<span class="go">u&#39;Name: My image 1 &#39;</span>
+</pre></div>
+</div>
+<p>如果没有找到，会返回<code class="docutils literal notranslate"><span class="pre">None</span></code>，还可选择默认值</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//div[@id=&quot;not-exists&quot;]/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract_first</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s1">&#39;not-found&#39;</span><span class="p">)</span>
+<span class="go">&#39;not-found&#39;</span>
+</pre></div>
+</div>
+<p>而CSS选择器还可以使用CSS3标准：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;title::text&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+<span class="go">[u&#39;Example website&#39;]</span>
+</pre></div>
+</div>
+<p>下面是几个比较全面的示例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//base/@href&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+<span class="go">[u&#39;http://example.com/&#39;]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;base::attr(href)&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+<span class="go">[u&#39;http://example.com/&#39;]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//a[contains(@href, &quot;image&quot;)]/@href&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+<span class="go">[u&#39;image1.html&#39;,</span>
+<span class="go"> u&#39;image2.html&#39;,</span>
+<span class="go"> u&#39;image3.html&#39;,</span>
+<span class="go"> u&#39;image4.html&#39;,</span>
+<span class="go"> u&#39;image5.html&#39;]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;a[href*=image]::attr(href)&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+<span class="go">[u&#39;image1.html&#39;,</span>
+<span class="go"> u&#39;image2.html&#39;,</span>
+<span class="go"> u&#39;image3.html&#39;,</span>
+<span class="go"> u&#39;image4.html&#39;,</span>
+<span class="go"> u&#39;image5.html&#39;]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//a[contains(@href, &quot;image&quot;)]/img/@src&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+<span class="go">[u&#39;image1_thumb.jpg&#39;,</span>
+<span class="go"> u&#39;image2_thumb.jpg&#39;,</span>
+<span class="go"> u&#39;image3_thumb.jpg&#39;,</span>
+<span class="go"> u&#39;image4_thumb.jpg&#39;,</span>
+<span class="go"> u&#39;image5_thumb.jpg&#39;]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;a[href*=image] img::attr(src)&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+<span class="go">[u&#39;image1_thumb.jpg&#39;,</span>
+<span class="go"> u&#39;image2_thumb.jpg&#39;,</span>
+<span class="go"> u&#39;image3_thumb.jpg&#39;,</span>
+<span class="go"> u&#39;image4_thumb.jpg&#39;,</span>
+<span class="go"> u&#39;image5_thumb.jpg&#39;]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>嵌套选择器<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">xpath()</span></code>和<code class="docutils literal notranslate"><span class="pre">css()</span></code>返回的是选择器列表，所以你可以继续使用它们的方法。举例来讲：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">links</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//a[contains(@href, &quot;image&quot;)]&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">links</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+<span class="go">[u&#39;&lt;a href=&quot;image1.html&quot;&gt;Name: My image 1 &lt;br&gt;&lt;img src=&quot;image1_thumb.jpg&quot;&gt;&lt;/a&gt;&#39;,</span>
+<span class="go"> u&#39;&lt;a href=&quot;image2.html&quot;&gt;Name: My image 2 &lt;br&gt;&lt;img src=&quot;image2_thumb.jpg&quot;&gt;&lt;/a&gt;&#39;,</span>
+<span class="go"> u&#39;&lt;a href=&quot;image3.html&quot;&gt;Name: My image 3 &lt;br&gt;&lt;img src=&quot;image3_thumb.jpg&quot;&gt;&lt;/a&gt;&#39;,</span>
+<span class="go"> u&#39;&lt;a href=&quot;image4.html&quot;&gt;Name: My image 4 &lt;br&gt;&lt;img src=&quot;image4_thumb.jpg&quot;&gt;&lt;/a&gt;&#39;,</span>
+<span class="go"> u&#39;&lt;a href=&quot;image5.html&quot;&gt;Name: My image 5 &lt;br&gt;&lt;img src=&quot;image5_thumb.jpg&quot;&gt;&lt;/a&gt;&#39;]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">link</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">links</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">link</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;@href&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">(),</span> <span class="n">link</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;img/@src&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">())</span>
+<span class="gp">... </span>    <span class="nb">print</span> <span class="s1">&#39;Link number </span><span class="si">%d</span><span class="s1"> points to url </span><span class="si">%s</span><span class="s1"> and image </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">args</span>
+
+<span class="go">Link number 0 points to url [u&#39;image1.html&#39;] and image [u&#39;image1_thumb.jpg&#39;]</span>
+<span class="go">Link number 1 points to url [u&#39;image2.html&#39;] and image [u&#39;image2_thumb.jpg&#39;]</span>
+<span class="go">Link number 2 points to url [u&#39;image3.html&#39;] and image [u&#39;image3_thumb.jpg&#39;]</span>
+<span class="go">Link number 3 points to url [u&#39;image4.html&#39;] and image [u&#39;image4_thumb.jpg&#39;]</span>
+<span class="go">Link number 4 points to url [u&#39;image5.html&#39;] and image [u&#39;image5_thumb.jpg&#39;]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>使用正则表达式<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Selector</span></code>有一个<code class="docutils literal notranslate"><span class="pre">re()</span></code>方法通过正则表达式提取数据，它返回的是unicode字符串列表，你不能再去嵌套使用</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//a[contains(@href, &quot;image&quot;)]/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">re</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Name:\s*(.*)&#39;</span><span class="p">)</span>
+<span class="go">[u&#39;My image 1&#39;,</span>
+<span class="go"> u&#39;My image 2&#39;,</span>
+<span class="go"> u&#39;My image 3&#39;,</span>
+<span class="go"> u&#39;My image 4&#39;,</span>
+<span class="go"> u&#39;My image 5&#39;]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//a[contains(@href, &quot;image&quot;)]/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">re_first</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Name:\s*(.*)&#39;</span><span class="p">)</span>
+<span class="go">u&#39;My image 1&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="xpath">
+<h2>XPath相对路径<a class="headerlink" href="#xpath" title="永久链接至标题">¶</a></h2>
+<p>当你嵌套使用XPath时候，不要使用<code class="docutils literal notranslate"><span class="pre">/</span></code>开头的，因为这个会相对文档根节点开始算起，需要使用相对路径</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">divs</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//div&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">divs</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//p&#39;</span><span class="p">):</span>  <span class="c1"># extracts all &lt;p&gt; inside</span>
+<span class="gp">... </span>    <span class="nb">print</span> <span class="n">p</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+
+<span class="go"># 或者下面这个直接使用p也可以</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">divs</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span> <span class="n">p</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>XPath建议<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h2>
+<div class="section" id="text">
+<h3>使用text作为条件时<a class="headerlink" href="#text" title="永久链接至标题">¶</a></h3>
+<p>避免使用<code class="docutils literal notranslate"><span class="pre">.//text()</span></code>,直接使用<code class="docutils literal notranslate"><span class="pre">.</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sel</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s2">&quot;//a[contains(., &#39;Next Page&#39;)]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+<span class="go">[u&#39;&lt;a href=&quot;#&quot;&gt;Click here to go to the &lt;strong&gt;Next Page&lt;/strong&gt;&lt;/a&gt;&#39;]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="node-1-node-1">
+<h3>//node[1]和(//node)[1]区别<a class="headerlink" href="#node-1-node-1" title="永久链接至标题">¶</a></h3>
+<ul class="simple">
+<li><p>//node[1]: 选择所有位于第一个子节点位置的node节点</p></li>
+<li><p>(//node)[1]: 选择所有的node节点，然后返回结果中的第一个node节点</p></li>
+</ul>
+</div>
+<div class="section" id="classcss">
+<h3>通过class查找时优先考虑CSS<a class="headerlink" href="#classcss" title="永久链接至标题">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="kn">from</span> <span class="nn">scrapy</span> <span class="k">import</span> <span class="n">Selector</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">sel</span> <span class="o">=</span> <span class="n">Selector</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s1">&#39;&lt;div class=&quot;hero shout&quot;&gt;&lt;time datetime=&quot;2014-07-23 19:00&quot;&gt;Special date&lt;/time&gt;&lt;/div&gt;&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">sel</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;.shout&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;./time/@datetime&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+<span class="p">[</span><span class="sa">u</span><span class="s1">&#39;2014-07-23 19:00&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="scrapy-05.html" class="btn btn-neutral float-right" title="Scrapy教程05- Item详解" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="scrapy-03.html" class="btn btn-neutral float-left" title="Scrapy教程03- Spider详解" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Xiong Neng
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

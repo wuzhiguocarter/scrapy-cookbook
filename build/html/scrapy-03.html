@@ -1,0 +1,342 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Scrapy教程03- Spider详解 &mdash; scrapy-cookbook 0.2.2 文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="Scrapy教程04- Selector详解" href="scrapy-04.html" />
+    <link rel="prev" title="Scrapy教程02- 完整示例" href="scrapy-02.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> scrapy-cookbook
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="scrapy-01.html">Scrapy教程01- 入门篇</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-02.html">Scrapy教程02- 完整示例</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Scrapy教程03- Spider详解</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#crawlspider">CrawlSpider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#xmlfeedspider">XMLFeedSpider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#csvfeedspider">CSVFeedSpider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sitemapspider">SitemapSpider</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-04.html">Scrapy教程04- Selector详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-05.html">Scrapy教程05- Item详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-06.html">Scrapy教程06- Item Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-07.html">Scrapy教程07- 内置服务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-08.html">Scrapy教程08- 文件与图片</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-09.html">Scrapy教程09- 部署</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-10.html">Scrapy教程10- 动态配置爬虫</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-11.html">Scrapy教程11- 模拟登录</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-12.html">Scrapy教程12- 抓取动态网站</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other/about.html">联系我</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scrapy-cookbook</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Scrapy教程03- Spider详解</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/scrapy-03.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="scrapy03-spider">
+<h1>Scrapy教程03- Spider详解<a class="headerlink" href="#scrapy03-spider" title="永久链接至标题">¶</a></h1>
+<p>Spider是爬虫框架的核心，爬取流程如下：</p>
+<ol class="arabic simple">
+<li><p>先初始化请求URL列表，并指定下载后处理response的回调函数。初次请求URL通过<code class="docutils literal notranslate"><span class="pre">start_urls</span></code>指定，调用<code class="docutils literal notranslate"><span class="pre">start_requests()</span></code>产生<code class="docutils literal notranslate"><span class="pre">Request</span></code>对象，然后注册<code class="docutils literal notranslate"><span class="pre">parse</span></code>方法作为回调</p></li>
+<li><p>在parse回调中解析response并返回字典,<code class="docutils literal notranslate"><span class="pre">Item</span></code>对象,<code class="docutils literal notranslate"><span class="pre">Request</span></code>对象或它们的迭代对象。<code class="docutils literal notranslate"><span class="pre">Request</span></code>对象还会包含回调函数，之后Scrapy下载完后会被这里注册的回调函数处理。</p></li>
+<li><p>在回调函数里面，你通过使用选择器（同样可以使用BeautifulSoup,lxml或其他工具）解析页面内容，并生成解析后的结果Item。</p></li>
+<li><p>最后返回的这些Item通常会被持久化到数据库中(使用<a class="reference external" href="http://doc.scrapy.org/en/latest/topics/item-pipeline.html#topics-item-pipeline">Item
+Pipeline</a>)或者使用<a class="reference external" href="http://doc.scrapy.org/en/latest/topics/feed-exports.html#topics-feed-exports">Feed
+exports</a>将其保存到文件中。</p></li>
+</ol>
+<p>尽管这个流程适合于所有的蜘蛛，但是Scrapy里面为不同的使用目的实现了一些常见的Spider。下面我们把它们列出来。</p>
+<div class="section" id="crawlspider">
+<h2>CrawlSpider<a class="headerlink" href="#crawlspider" title="永久链接至标题">¶</a></h2>
+<p>链接爬取蜘蛛，专门为那些爬取有特定规律的链接内容而准备的。
+如果你觉得它还不足以适合你的需求，可以先继承它然后覆盖相应的方法，或者自定义Spider也行。</p>
+<p>它除了从<code class="docutils literal notranslate"><span class="pre">scrapy.Spider</span></code>类继承的属性外，还有一个新的属性<code class="docutils literal notranslate"><span class="pre">rules</span></code>,它是一个<code class="docutils literal notranslate"><span class="pre">Rule</span></code>对象列表，每个<code class="docutils literal notranslate"><span class="pre">Rule</span></code>对象定义了某个规则，如果多个<code class="docutils literal notranslate"><span class="pre">Rule</span></code>匹配一个连接，那么使用第一个，根据定义的顺序。</p>
+<p>一个详细的例子：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">coolscrapy.items</span> <span class="kn">import</span> <span class="n">HuxiuItem</span>
+<span class="kn">import</span> <span class="nn">scrapy</span>
+<span class="kn">from</span> <span class="nn">scrapy.spiders</span> <span class="kn">import</span> <span class="n">CrawlSpider</span><span class="p">,</span> <span class="n">Rule</span>
+<span class="kn">from</span> <span class="nn">scrapy.linkextractors</span> <span class="kn">import</span> <span class="n">LinkExtractor</span>
+
+
+<span class="k">class</span> <span class="nc">LinkSpider</span><span class="p">(</span><span class="n">CrawlSpider</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;link&quot;</span>
+    <span class="n">allowed_domains</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;huxiu.com&quot;</span><span class="p">]</span>
+    <span class="n">start_urls</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;http://www.huxiu.com/index.php&quot;</span>
+    <span class="p">]</span>
+
+    <span class="n">rules</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="c1"># 提取匹配正则式&#39;/group?f=index_group&#39;链接 (但是不能匹配&#39;deny.php&#39;)</span>
+        <span class="c1"># 并且会递归爬取(如果没有定义callback，默认follow=True).</span>
+        <span class="n">Rule</span><span class="p">(</span><span class="n">LinkExtractor</span><span class="p">(</span><span class="n">allow</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;/group?f=index_group&#39;</span><span class="p">,</span> <span class="p">),</span> <span class="n">deny</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;deny\.php&#39;</span><span class="p">,</span> <span class="p">))),</span>
+        <span class="c1"># 提取匹配&#39;/article/\d+/\d+.html&#39;的链接，并使用parse_item来解析它们下载后的内容，不递归</span>
+        <span class="n">Rule</span><span class="p">(</span><span class="n">LinkExtractor</span><span class="p">(</span><span class="n">allow</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;/article/\d+/\d+\.html&#39;</span><span class="p">,</span> <span class="p">)),</span> <span class="n">callback</span><span class="o">=</span><span class="s1">&#39;parse_item&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">parse_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Hi, this is an item page! </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">detail</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//div[@class=&quot;article-wrap&quot;]&#39;</span><span class="p">)</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">HuxiuItem</span><span class="p">()</span>
+        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">detail</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;h1/text()&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;link&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">url</span>
+        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;posttime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">detail</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
+            <span class="s1">&#39;div[@class=&quot;article-author&quot;]/span[@class=&quot;article-time&quot;]/text()&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">],</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;link&#39;</span><span class="p">],</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;posttime&#39;</span><span class="p">])</span>
+        <span class="k">yield</span> <span class="n">item</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="xmlfeedspider">
+<h2>XMLFeedSpider<a class="headerlink" href="#xmlfeedspider" title="永久链接至标题">¶</a></h2>
+<p>XML订阅蜘蛛，用来爬取XML形式的订阅内容，通过某个指定的节点来遍历。
+可使用<code class="docutils literal notranslate"><span class="pre">iternodes</span></code>, <code class="docutils literal notranslate"><span class="pre">xml</span></code>,
+和<code class="docutils literal notranslate"><span class="pre">html</span></code>三种形式的迭代器，不过当内容比较多的时候推荐使用<code class="docutils literal notranslate"><span class="pre">iternodes</span></code>，
+默认也是它，可以节省内存提升性能，不需要将整个DOM加载到内存中再解析。而使用<code class="docutils literal notranslate"><span class="pre">html</span></code>可以处理XML有格式错误的内容。
+处理XML的时候最好先<a class="reference external" href="http://doc.scrapy.org/en/1.0/topics/selectors.html#removing-namespaces">Removing
+namespaces</a></p>
+<p>接下来我通过爬取我的博客订阅XML来展示它的使用方法。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">coolscrapy.items</span> <span class="kn">import</span> <span class="n">BlogItem</span>
+<span class="kn">import</span> <span class="nn">scrapy</span>
+<span class="kn">from</span> <span class="nn">scrapy.spiders</span> <span class="kn">import</span> <span class="n">XMLFeedSpider</span>
+
+
+<span class="k">class</span> <span class="nc">XMLSpider</span><span class="p">(</span><span class="n">XMLFeedSpider</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;xml&quot;</span>
+    <span class="n">namespaces</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;atom&#39;</span><span class="p">,</span> <span class="s1">&#39;http://www.w3.org/2005/Atom&#39;</span><span class="p">)]</span>
+    <span class="n">allowed_domains</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;github.io&quot;</span><span class="p">]</span>
+    <span class="n">start_urls</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;http://www.pycoding.com/atom.xml&quot;</span>
+    <span class="p">]</span>
+    <span class="n">iterator</span> <span class="o">=</span> <span class="s1">&#39;xml&#39;</span>  <span class="c1"># 缺省的iternodes，貌似对于有namespace的xml不行</span>
+    <span class="n">itertag</span> <span class="o">=</span> <span class="s1">&#39;atom:entry&#39;</span>
+
+    <span class="k">def</span> <span class="nf">parse_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="c1"># self.logger.info(&#39;Hi, this is a &lt;%s&gt; node!&#39;, self.itertag)</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">BlogItem</span><span class="p">()</span>
+        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;atom:title/text()&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;link&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;atom:link/@href&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;atom:id/text()&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;published&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;atom:published/text()&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;updated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;atom:updated/text()&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">],</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;link&#39;</span><span class="p">],</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;published&#39;</span><span class="p">]]))</span>
+        <span class="k">return</span> <span class="n">item</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="csvfeedspider">
+<h2>CSVFeedSpider<a class="headerlink" href="#csvfeedspider" title="永久链接至标题">¶</a></h2>
+<p>这个跟上面的XMLFeedSpider很类似，区别在于它会一行一行的迭代，而不是一个节点一个节点的迭代。
+每次迭代行的时候会调用<code class="docutils literal notranslate"><span class="pre">parse_row()</span></code>方法。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">coolscrapy.items</span> <span class="kn">import</span> <span class="n">BlogItem</span>
+<span class="kn">from</span> <span class="nn">scrapy.spiders</span> <span class="kn">import</span> <span class="n">CSVFeedSpider</span>
+
+
+<span class="k">class</span> <span class="nc">CSVSpider</span><span class="p">(</span><span class="n">CSVFeedSpider</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;csv&quot;</span>
+    <span class="n">allowed_domains</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;example.com&#39;</span><span class="p">]</span>
+    <span class="n">start_urls</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;http://www.example.com/feed.csv&#39;</span><span class="p">]</span>
+    <span class="n">delimiter</span> <span class="o">=</span> <span class="s1">&#39;;&#39;</span>
+    <span class="n">quotechar</span> <span class="o">=</span> <span class="s2">&quot;&#39;&quot;</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">parse_row</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">row</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Hi, this is a row!: </span><span class="si">%r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">BlogItem</span><span class="p">()</span>
+        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">item</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sitemapspider">
+<h2>SitemapSpider<a class="headerlink" href="#sitemapspider" title="永久链接至标题">¶</a></h2>
+<p>站点地图蜘蛛，允许你使用<a class="reference external" href="http://www.sitemaps.org/">Sitemaps</a>发现URL后爬取整个站点。
+还支持嵌套的站点地图以及从<code class="docutils literal notranslate"><span class="pre">robots.txt</span></code>中发现站点URL</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="scrapy-04.html" class="btn btn-neutral float-right" title="Scrapy教程04- Selector详解" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="scrapy-02.html" class="btn btn-neutral float-left" title="Scrapy教程02- 完整示例" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Xiong Neng
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

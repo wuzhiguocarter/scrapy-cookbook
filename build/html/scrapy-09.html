@@ -1,0 +1,352 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Scrapy教程09- 部署 &mdash; scrapy-cookbook 0.2.2 文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="Scrapy教程10- 动态配置爬虫" href="scrapy-10.html" />
+    <link rel="prev" title="Scrapy教程08- 文件与图片" href="scrapy-08.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> scrapy-cookbook
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="scrapy-01.html">Scrapy教程01- 入门篇</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-02.html">Scrapy教程02- 完整示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-03.html">Scrapy教程03- Spider详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-04.html">Scrapy教程04- Selector详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-05.html">Scrapy教程05- Item详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-06.html">Scrapy教程06- Item Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-07.html">Scrapy教程07- 内置服务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-08.html">Scrapy教程08- 文件与图片</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Scrapy教程09- 部署</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#scrapyd">部署到Scrapyd</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">安装</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">部署</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#scrapy-cloud">部署到Scrapy Cloud</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-10.html">Scrapy教程10- 动态配置爬虫</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-11.html">Scrapy教程11- 模拟登录</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-12.html">Scrapy教程12- 抓取动态网站</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other/about.html">联系我</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scrapy-cookbook</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Scrapy教程09- 部署</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/scrapy-09.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="scrapy09">
+<h1>Scrapy教程09- 部署<a class="headerlink" href="#scrapy09" title="永久链接至标题">¶</a></h1>
+<p>本篇主要介绍两种部署爬虫的方案。如果仅仅在开发调试的时候在本地部署跑起来是很容易的，不过要是生产环境，爬虫任务量大，并且持续时间长，那么还是建议使用专业的部署方法。主要是两种方案：</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://doc.scrapy.org/en/1.0/topics/deploy.html#deploy-scrapyd">Scrapyd</a>
+开源方案</p></li>
+<li><p><a class="reference external" href="http://doc.scrapy.org/en/1.0/topics/deploy.html#deploy-scrapy-cloud">Scrapy
+Cloud</a>
+云方案</p></li>
+</ul>
+<div class="section" id="scrapyd">
+<h2>部署到Scrapyd<a class="headerlink" href="#scrapyd" title="永久链接至标题">¶</a></h2>
+<p><a class="reference external" href="http://doc.scrapy.org/en/1.0/topics/deploy.html#deploy-scrapyd">Scrapyd</a>是一个开源软件，用来运行蜘蛛爬虫。它提供了HTTP
+API的服务器，还能运行和监控Scrapy的蜘蛛</p>
+<p>要部署爬虫到Scrapyd，需要使用到<a class="reference external" href="https://github.com/scrapy/scrapyd-client">scrapyd-client</a>部署工具集，下面我演示下部署的步骤</p>
+<p>Scrapyd通常以守护进程daemon形式运行，监听spider的请求，然后为每个spider创建一个进程执行<code class="docutils literal notranslate"><span class="pre">scrapy</span> <span class="pre">crawl</span> <span class="pre">myspider</span></code>,同时Scrapyd还能以多进程方式启动，通过配置<code class="docutils literal notranslate"><span class="pre">max_proc</span></code>和<code class="docutils literal notranslate"><span class="pre">max_proc_per_cpu</span></code>选项</p>
+<div class="section" id="id1">
+<h3>安装<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h3>
+<p>使用pip安装</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install scrapyd
+</pre></div>
+</div>
+<p>在ubuntu系统上面</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>apt-get install scrapyd
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>配置<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h3>
+<p>配置文件地址，优先级从低到高</p>
+<ul class="simple">
+<li><p>/etc/scrapyd/scrapyd.conf (Unix)</p></li>
+<li><p>/etc/scrapyd/conf.d/* (in alphabetical order, Unix)</p></li>
+<li><p>scrapyd.conf</p></li>
+<li><p>~/.scrapyd.conf (users home directory)</p></li>
+</ul>
+<p>具体参数参考<a class="reference external" href="http://scrapyd.readthedocs.org/en/latest/config.html">scrapyd配置</a></p>
+<p>简单的例子</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">scrapyd</span><span class="p">]</span>
+<span class="n">eggs_dir</span>    <span class="o">=</span> <span class="n">eggs</span>
+<span class="n">logs_dir</span>    <span class="o">=</span> <span class="n">logs</span>
+<span class="n">items_dir</span>   <span class="o">=</span>
+<span class="n">jobs_to_keep</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">dbs_dir</span>     <span class="o">=</span> <span class="n">dbs</span>
+<span class="n">max_proc</span>    <span class="o">=</span> <span class="mi">0</span>
+<span class="n">max_proc_per_cpu</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">finished_to_keep</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">poll_interval</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">bind_address</span> <span class="o">=</span> <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span>
+<span class="n">http_port</span>   <span class="o">=</span> <span class="mi">6800</span>
+<span class="n">debug</span>       <span class="o">=</span> <span class="n">off</span>
+<span class="n">runner</span>      <span class="o">=</span> <span class="n">scrapyd</span><span class="o">.</span><span class="n">runner</span>
+<span class="n">application</span> <span class="o">=</span> <span class="n">scrapyd</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">application</span>
+<span class="n">launcher</span>    <span class="o">=</span> <span class="n">scrapyd</span><span class="o">.</span><span class="n">launcher</span><span class="o">.</span><span class="n">Launcher</span>
+<span class="n">webroot</span>     <span class="o">=</span> <span class="n">scrapyd</span><span class="o">.</span><span class="n">website</span><span class="o">.</span><span class="n">Root</span>
+
+<span class="p">[</span><span class="n">services</span><span class="p">]</span>
+<span class="n">schedule</span><span class="o">.</span><span class="n">json</span>     <span class="o">=</span> <span class="n">scrapyd</span><span class="o">.</span><span class="n">webservice</span><span class="o">.</span><span class="n">Schedule</span>
+<span class="n">cancel</span><span class="o">.</span><span class="n">json</span>       <span class="o">=</span> <span class="n">scrapyd</span><span class="o">.</span><span class="n">webservice</span><span class="o">.</span><span class="n">Cancel</span>
+<span class="n">addversion</span><span class="o">.</span><span class="n">json</span>   <span class="o">=</span> <span class="n">scrapyd</span><span class="o">.</span><span class="n">webservice</span><span class="o">.</span><span class="n">AddVersion</span>
+<span class="n">listprojects</span><span class="o">.</span><span class="n">json</span> <span class="o">=</span> <span class="n">scrapyd</span><span class="o">.</span><span class="n">webservice</span><span class="o">.</span><span class="n">ListProjects</span>
+<span class="n">listversions</span><span class="o">.</span><span class="n">json</span> <span class="o">=</span> <span class="n">scrapyd</span><span class="o">.</span><span class="n">webservice</span><span class="o">.</span><span class="n">ListVersions</span>
+<span class="n">listspiders</span><span class="o">.</span><span class="n">json</span>  <span class="o">=</span> <span class="n">scrapyd</span><span class="o">.</span><span class="n">webservice</span><span class="o">.</span><span class="n">ListSpiders</span>
+<span class="n">delproject</span><span class="o">.</span><span class="n">json</span>   <span class="o">=</span> <span class="n">scrapyd</span><span class="o">.</span><span class="n">webservice</span><span class="o">.</span><span class="n">DeleteProject</span>
+<span class="n">delversion</span><span class="o">.</span><span class="n">json</span>   <span class="o">=</span> <span class="n">scrapyd</span><span class="o">.</span><span class="n">webservice</span><span class="o">.</span><span class="n">DeleteVersion</span>
+<span class="n">listjobs</span><span class="o">.</span><span class="n">json</span>     <span class="o">=</span> <span class="n">scrapyd</span><span class="o">.</span><span class="n">webservice</span><span class="o">.</span><span class="n">ListJobs</span>
+<span class="n">daemonstatus</span><span class="o">.</span><span class="n">json</span> <span class="o">=</span> <span class="n">scrapyd</span><span class="o">.</span><span class="n">webservice</span><span class="o">.</span><span class="n">DaemonStatus</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>部署<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h3>
+<p>使用<a class="reference external" href="https://github.com/scrapy/scrapyd-client">scrapyd-client</a>最方便，
+Scrapyd-client是<a class="reference external" href="https://github.com/scrapy/scrapyd">scrapyd</a>的一个客户端，它提供了<code class="docutils literal notranslate"><span class="pre">scrapyd-deploy</span></code>工具将工程部署到Scrapyd服务器上面</p>
+<p>通常将你的工程部署到Scrapyd需要两个步骤：</p>
+<ol class="arabic simple">
+<li><p>将工程打包成python蛋，你需要安装<a class="reference external" href="http://pypi.python.org/pypi/setuptools">setuptools</a></p></li>
+<li><p>通过<a class="reference external" href="https://scrapyd.readthedocs.org/en/latest/api.html#addversion-json">addversion.json</a>终端将蟒蛇蛋上传至Scrapd服务器</p></li>
+</ol>
+<p>你可以在你的工程配置文件<code class="docutils literal notranslate"><span class="pre">scrapy.cfg</span></code>定义Scrapyd目标</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">deploy</span><span class="p">:</span><span class="n">example</span><span class="p">]</span>
+<span class="n">url</span> <span class="o">=</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">scrapyd</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">scrapyd</span>
+<span class="n">username</span> <span class="o">=</span> <span class="n">scrapy</span>
+<span class="n">password</span> <span class="o">=</span> <span class="n">secret</span>
+</pre></div>
+</div>
+<p>列出所有可用目标使用命令</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scrapyd</span><span class="o">-</span><span class="n">deploy</span> <span class="o">-</span><span class="n">l</span>
+</pre></div>
+</div>
+<p>列出某个目标上面所有可运行的工程，执行命令</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scrapyd</span><span class="o">-</span><span class="n">deploy</span> <span class="o">-</span><span class="n">L</span> <span class="n">example</span>
+</pre></div>
+</div>
+<p>先<code class="docutils literal notranslate"><span class="pre">cd</span></code>到工程根目录，然后使用如下命令来部署：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scrapyd</span><span class="o">-</span><span class="n">deploy</span> <span class="o">&lt;</span><span class="n">target</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">p</span> <span class="o">&lt;</span><span class="n">project</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>你还可以定义默认的target和project，省的你每次都去敲代码</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">deploy</span><span class="p">]</span>
+<span class="n">url</span> <span class="o">=</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">scrapyd</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">scrapyd</span>
+<span class="n">username</span> <span class="o">=</span> <span class="n">scrapy</span>
+<span class="n">password</span> <span class="o">=</span> <span class="n">secret</span>
+<span class="n">project</span> <span class="o">=</span> <span class="n">yourproject</span>
+</pre></div>
+</div>
+<p>这样你就直接取执行</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scrapyd</span><span class="o">-</span><span class="n">deploy</span>
+</pre></div>
+</div>
+<p>如果你有多个target，那么可以使用下面命令将project部署到多个target服务器上面</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scrapyd</span><span class="o">-</span><span class="n">deploy</span> <span class="o">-</span><span class="n">a</span> <span class="o">-</span><span class="n">p</span> <span class="o">&lt;</span><span class="n">project</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="scrapy-cloud">
+<h2>部署到Scrapy Cloud<a class="headerlink" href="#scrapy-cloud" title="永久链接至标题">¶</a></h2>
+<p><a class="reference external" href="http://scrapinghub.com/scrapy-cloud/">Scrapy
+Cloud</a>是一个托管的云服务器，由Scrapy背后的公司<a class="reference external" href="http://scrapinghub.com/">Scrapinghub</a>维护</p>
+<p>它免除了安装和监控服务器的需要，并提供了非常美观的UI来管理各个Spider，还能查看被抓取的Item，日志和状态等。</p>
+<p>你可以使用<a class="reference external" href="http://doc.scrapinghub.com/shub.html">shub</a>命令行工具来讲spider部署到Scrapy
+Cloud。更多请参考<a class="reference external" href="http://doc.scrapinghub.com/scrapy-cloud.html">官方文档</a></p>
+<p>Scrapy
+Cloud和Scrapyd是兼容的，你可以根据需要在两者之前切换，配置文件也是<code class="docutils literal notranslate"><span class="pre">scrapy.cfg</span></code>，跟<code class="docutils literal notranslate"><span class="pre">scrapyd-deploy</span></code>读取的是一样的。</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="scrapy-10.html" class="btn btn-neutral float-right" title="Scrapy教程10- 动态配置爬虫" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="scrapy-08.html" class="btn btn-neutral float-left" title="Scrapy教程08- 文件与图片" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Xiong Neng
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

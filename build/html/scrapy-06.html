@@ -1,0 +1,438 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Scrapy教程06- Item Pipeline &mdash; scrapy-cookbook 0.2.2 文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="Scrapy教程07- 内置服务" href="scrapy-07.html" />
+    <link rel="prev" title="Scrapy教程05- Item详解" href="scrapy-05.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> scrapy-cookbook
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="scrapy-01.html">Scrapy教程01- 入门篇</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-02.html">Scrapy教程02- 完整示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-03.html">Scrapy教程03- Spider详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-04.html">Scrapy教程04- Selector详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-05.html">Scrapy教程05- Item详解</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Scrapy教程06- Item Pipeline</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pipeline">编写自己的Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#item-pipeline">Item Pipeline示例</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">价格验证</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#itemjson">将item写入json文件</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#itemmongodb">将item存储到MongoDB中</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">重复过滤器</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">激活一个Item Pipeline组件</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#feed-exports">Feed exports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">请求和响应</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">给回调函数传递额外的参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#request">Request子类</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#response">Response子类</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-07.html">Scrapy教程07- 内置服务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-08.html">Scrapy教程08- 文件与图片</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-09.html">Scrapy教程09- 部署</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-10.html">Scrapy教程10- 动态配置爬虫</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-11.html">Scrapy教程11- 模拟登录</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-12.html">Scrapy教程12- 抓取动态网站</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other/about.html">联系我</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scrapy-cookbook</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Scrapy教程06- Item Pipeline</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/scrapy-06.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="scrapy06-item-pipeline">
+<h1>Scrapy教程06- Item Pipeline<a class="headerlink" href="#scrapy06-item-pipeline" title="永久链接至标题">¶</a></h1>
+<p>当一个item被蜘蛛爬取到之后会被发送给Item
+Pipeline，然后多个组件按照顺序处理这个item。 每个Item
+Pipeline组件其实就是一个实现了一个简单方法的Python类。他们接受一个item并在上面执行逻辑，还能决定这个item到底是否还要继续往下传输，如果不要了就直接丢弃。</p>
+<p>使用Item Pipeline的常用场景：</p>
+<ul class="simple">
+<li><p>清理HTML数据</p></li>
+<li><p>验证被抓取的数据(检查item是否包含某些字段)</p></li>
+<li><p>重复性检查(然后丢弃)</p></li>
+<li><p>将抓取的数据存储到数据库中</p></li>
+</ul>
+<div class="section" id="pipeline">
+<h2>编写自己的Pipeline<a class="headerlink" href="#pipeline" title="永久链接至标题">¶</a></h2>
+<p>定义一个Python类，然后实现方法<code class="docutils literal notranslate"><span class="pre">process_item(self,</span> <span class="pre">item,</span> <span class="pre">spider)</span></code>即可，返回一个字典或Item，或者抛出<code class="docutils literal notranslate"><span class="pre">DropItem</span></code>异常丢弃这个Item。</p>
+<p>或者还可以实现下面几个方法：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">open_spider(self,</span> <span class="pre">spider)</span></code> 蜘蛛打开的时执行</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">close_spider(self,</span> <span class="pre">spider)</span></code> 蜘蛛关闭时执行</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">from_crawler(cls,</span> <span class="pre">crawler)</span></code>
+可访问核心组件比如配置和信号，并注册钩子函数到Scrapy中</p></li>
+</ul>
+</div>
+<div class="section" id="item-pipeline">
+<h2>Item Pipeline示例<a class="headerlink" href="#item-pipeline" title="永久链接至标题">¶</a></h2>
+<div class="section" id="id1">
+<h3>价格验证<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h3>
+<p>我们通过一个价格验证例子来看看怎样使用</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scrapy.exceptions</span> <span class="kn">import</span> <span class="n">DropItem</span>
+
+<span class="k">class</span> <span class="nc">PricePipeline</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="n">vat_factor</span> <span class="o">=</span> <span class="mf">1.15</span>
+
+    <span class="k">def</span> <span class="nf">process_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;price_excludes_vat&#39;</span><span class="p">]:</span>
+                <span class="n">item</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">vat_factor</span>
+            <span class="k">return</span> <span class="n">item</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">DropItem</span><span class="p">(</span><span class="s2">&quot;Missing price in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="itemjson">
+<h3>将item写入json文件<a class="headerlink" href="#itemjson" title="永久链接至标题">¶</a></h3>
+<p>下面的这个Pipeline将所有的item写入到一个单独的json文件，一行一个item</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
+
+<span class="k">class</span> <span class="nc">JsonWriterPipeline</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;items.jl&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">process_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">item</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">item</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="itemmongodb">
+<h3>将item存储到MongoDB中<a class="headerlink" href="#itemmongodb" title="永久链接至标题">¶</a></h3>
+<p>这个例子使用<a class="reference external" href="http://api.mongodb.org/python/current/">pymongo</a>来演示怎样讲item保存到MongoDB中。
+MongoDB的地址和数据库名在配置中指定，这个例子主要是向你展示怎样使用<code class="docutils literal notranslate"><span class="pre">from_crawler()</span></code>方法，以及如何清理资源。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pymongo</span>
+
+<span class="k">class</span> <span class="nc">MongoPipeline</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;scrapy_items&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mongo_uri</span><span class="p">,</span> <span class="n">mongo_db</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mongo_uri</span> <span class="o">=</span> <span class="n">mongo_uri</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mongo_db</span> <span class="o">=</span> <span class="n">mongo_db</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_crawler</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">crawler</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">mongo_uri</span><span class="o">=</span><span class="n">crawler</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;MONGO_URI&#39;</span><span class="p">),</span>
+            <span class="n">mongo_db</span><span class="o">=</span><span class="n">crawler</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;MONGO_DATABASE&#39;</span><span class="p">,</span> <span class="s1">&#39;items&#39;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">open_spider</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">pymongo</span><span class="o">.</span><span class="n">MongoClient</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mongo_uri</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">mongo_db</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">close_spider</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">process_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_name</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">item</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>重复过滤器<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h3>
+<p>假设我们的item里面的id字典是唯一的，但是我们的蜘蛛返回了多个相同id的item</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scrapy.exceptions</span> <span class="kn">import</span> <span class="n">DropItem</span>
+
+<span class="k">class</span> <span class="nc">DuplicatesPipeline</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ids_seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">process_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ids_seen</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">DropItem</span><span class="p">(</span><span class="s2">&quot;Duplicate item found: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ids_seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">item</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>激活一个Item Pipeline组件<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
+<p>你必须在配置文件中将你需要激活的Pipline组件添加到<code class="docutils literal notranslate"><span class="pre">ITEM_PIPELINES</span></code>中</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ITEM_PIPELINES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;myproject.pipelines.PricePipeline&#39;</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span>
+    <span class="s1">&#39;myproject.pipelines.JsonWriterPipeline&#39;</span><span class="p">:</span> <span class="mi">800</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>后面的数字表示它的执行顺序，从低到高执行，范围0-1000</p>
+</div>
+<div class="section" id="feed-exports">
+<h2>Feed exports<a class="headerlink" href="#feed-exports" title="永久链接至标题">¶</a></h2>
+<p>这里顺便提下Feed
+exports，一般有的爬虫直接将爬取结果序列化到文件中，并保存到某个存储介质中。只需要在settings里面设置几个即可：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">FEED_FORMAT</span><span class="o">=</span> <span class="n">json</span> <span class="c1"># json|jsonlines|csv|xml|pickle|marshal</span>
+<span class="o">*</span> <span class="n">FEED_URI</span><span class="o">=</span> <span class="n">file</span><span class="p">:</span><span class="o">///</span><span class="n">tmp</span><span class="o">/</span><span class="n">export</span><span class="o">.</span><span class="n">csv</span><span class="o">|</span><span class="n">ftp</span><span class="p">:</span><span class="o">//</span><span class="n">user</span><span class="p">:</span><span class="k">pass</span><span class="nd">@ftp</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">export</span><span class="o">.</span><span class="n">csv</span><span class="o">|</span><span class="n">s3</span><span class="p">:</span><span class="o">//</span><span class="n">aws_key</span><span class="p">:</span><span class="n">aws_secret</span><span class="nd">@mybucket</span><span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">export</span><span class="o">.</span><span class="n">csv</span><span class="o">|</span><span class="n">stdout</span><span class="p">:</span>
+<span class="o">*</span> <span class="n">FEED_EXPORT_FIELDS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="s2">&quot;baz&quot;</span><span class="p">]</span> <span class="c1"># 这个在导出csv的时候有用</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>请求和响应<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h2>
+<p>Scrapy使用<code class="docutils literal notranslate"><span class="pre">Request</span></code>和<code class="docutils literal notranslate"><span class="pre">Response</span></code>对象来爬取网站。<code class="docutils literal notranslate"><span class="pre">Request</span></code>对象被蜘蛛生成，然后被传递给下载器，之后下载器处理这个<code class="docutils literal notranslate"><span class="pre">Request</span></code>后返回<code class="docutils literal notranslate"><span class="pre">Response</span></code>对象，然后返回给生成<code class="docutils literal notranslate"><span class="pre">Request</span></code>的这个蜘蛛。</p>
+<div class="section" id="id5">
+<h3>给回调函数传递额外的参数<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Request</span></code>对象生成的时候会通过关键字参数<code class="docutils literal notranslate"><span class="pre">callback</span></code>指定回调函数，<code class="docutils literal notranslate"><span class="pre">Response</span></code>对象被当做第一个参数传入，有时候我们想传递额外的参数，比如我们构建某个Item的时候，需要两步，第一步是链接属性，第二步是详情属性，可以指定<code class="docutils literal notranslate"><span class="pre">Request.meta</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">parse_page1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">MyItem</span><span class="p">()</span>
+    <span class="n">item</span><span class="p">[</span><span class="s1">&#39;main_url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">url</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="s2">&quot;http://www.example.com/some_page.html&quot;</span><span class="p">,</span>
+                             <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parse_page2</span><span class="p">)</span>
+    <span class="n">request</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;item&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
+    <span class="k">return</span> <span class="n">request</span>
+
+<span class="k">def</span> <span class="nf">parse_page2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;item&#39;</span><span class="p">]</span>
+    <span class="n">item</span><span class="p">[</span><span class="s1">&#39;other_url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">url</span>
+    <span class="k">return</span> <span class="n">item</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="request">
+<h3>Request子类<a class="headerlink" href="#request" title="永久链接至标题">¶</a></h3>
+<p>Scrapy为各种不同的场景内置了很多Request子类，你还可以继承它自定义自己的请求类。</p>
+<p><code class="docutils literal notranslate"><span class="pre">FormRequest</span></code>这个专门为form表单设计，模拟表单提交的示例</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">return</span> <span class="p">[</span><span class="n">FormRequest</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;http://www.example.com/post/action&quot;</span><span class="p">,</span>
+                    <span class="n">formdata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;John Doe&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="s1">&#39;27&#39;</span><span class="p">},</span>
+                    <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">after_post</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>我们再来一个例子模拟用户登录，使用了<code class="docutils literal notranslate"><span class="pre">FormRequest.from_response()</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scrapy</span>
+
+<span class="k">class</span> <span class="nc">LoginSpider</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Spider</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;example.com&#39;</span>
+    <span class="n">start_urls</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;http://www.example.com/users/login.php&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">FormRequest</span><span class="o">.</span><span class="n">from_response</span><span class="p">(</span>
+            <span class="n">response</span><span class="p">,</span>
+            <span class="n">formdata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;username&#39;</span><span class="p">:</span> <span class="s1">&#39;john&#39;</span><span class="p">,</span> <span class="s1">&#39;password&#39;</span><span class="p">:</span> <span class="s1">&#39;secret&#39;</span><span class="p">},</span>
+            <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">after_login</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">after_login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="c1"># check login succeed before going on</span>
+        <span class="k">if</span> <span class="s2">&quot;authentication failed&quot;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">body</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Login failed&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># continue scraping with authenticated session...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="response">
+<h3>Response子类<a class="headerlink" href="#response" title="永久链接至标题">¶</a></h3>
+<p>一个<code class="docutils literal notranslate"><span class="pre">scrapy.http.Response</span></code>对象代表了一个HTTP相应，通常是被下载器下载后得到，并交给Spider做进一步的处理。Response也有很多默认的子类，用于表示各种不同的响应类型。</p>
+<ul class="simple">
+<li><p>TextResponse
+在基本<code class="docutils literal notranslate"><span class="pre">Response</span></code>类基础之上增加了编码功能，专门用于二进制数据比如图片、声音或其他媒体文件</p></li>
+<li><p>HtmlResponse
+此类是<code class="docutils literal notranslate"><span class="pre">TextResponse</span></code>的子类，通过查询HTML的<code class="docutils literal notranslate"><span class="pre">meta</span> <span class="pre">http-equiv</span></code>属性实现了编码自动发现</p></li>
+<li><p>XmlResponse
+此类是<code class="docutils literal notranslate"><span class="pre">TextResponse</span></code>的子类，通过查询XML声明实现编码自动发现</p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="scrapy-07.html" class="btn btn-neutral float-right" title="Scrapy教程07- 内置服务" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="scrapy-05.html" class="btn btn-neutral float-left" title="Scrapy教程05- Item详解" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Xiong Neng
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

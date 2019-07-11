@@ -1,0 +1,325 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Scrapy教程08- 文件与图片 &mdash; scrapy-cookbook 0.2.2 文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="Scrapy教程09- 部署" href="scrapy-09.html" />
+    <link rel="prev" title="Scrapy教程07- 内置服务" href="scrapy-07.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> scrapy-cookbook
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="scrapy-01.html">Scrapy教程01- 入门篇</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-02.html">Scrapy教程02- 完整示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-03.html">Scrapy教程03- Spider详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-04.html">Scrapy教程04- Selector详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-05.html">Scrapy教程05- Item详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-06.html">Scrapy教程06- Item Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-07.html">Scrapy教程07- 内置服务</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Scrapy教程08- 文件与图片</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#files-pipeline">使用Files Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#images-pipeline">使用Images Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">使用例子</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">自定义媒体管道</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-09.html">Scrapy教程09- 部署</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-10.html">Scrapy教程10- 动态配置爬虫</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-11.html">Scrapy教程11- 模拟登录</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-12.html">Scrapy教程12- 抓取动态网站</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other/about.html">联系我</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scrapy-cookbook</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Scrapy教程08- 文件与图片</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/scrapy-08.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="scrapy08">
+<h1>Scrapy教程08- 文件与图片<a class="headerlink" href="#scrapy08" title="永久链接至标题">¶</a></h1>
+<p>Scrapy为我们提供了可重用的<a class="reference external" href="http://doc.scrapy.org/en/1.0/topics/item-pipeline.html">item
+pipelines</a>为某个特定的Item去下载文件。
+通常来说你会选择使用Files Pipeline或Images Pipeline。</p>
+<p>这两个管道都实现了：</p>
+<ul class="simple">
+<li><p>避免重复下载</p></li>
+<li><p>可以指定下载后保存的地方(文件系统目录中,Amazon S3中)</p></li>
+</ul>
+<p>Images Pipeline为处理图片提供了额外的功能：</p>
+<ul class="simple">
+<li><p>将所有下载的图片格式转换成普通的JPG并使用RGB颜色模式</p></li>
+<li><p>生成缩略图</p></li>
+<li><p>检查图片的宽度和高度确保它们满足最小的尺寸限制</p></li>
+</ul>
+<p>管道同时会在内部保存一个被调度下载的URL列表，然后将包含相同媒体的相应关联到这个队列上来，从而防止了多个item共享这个媒体时重复下载。</p>
+<div class="section" id="files-pipeline">
+<h2>使用Files Pipeline<a class="headerlink" href="#files-pipeline" title="永久链接至标题">¶</a></h2>
+<p>一般我们会按照下面的步骤来使用文件管道：</p>
+<ol class="arabic simple">
+<li><p>在某个Spider中，你爬取一个item后，将相应的文件URL放入<code class="docutils literal notranslate"><span class="pre">file_urls</span></code>字段中</p></li>
+<li><p>item被返回之后就会转交给item pipeline</p></li>
+<li><p>当这个item到达<code class="docutils literal notranslate"><span class="pre">FilesPipeline</span></code>时，在<code class="docutils literal notranslate"><span class="pre">file_urls</span></code>字段中的URL列表会通过标准的Scrapy调度器和下载器来调度下载，并且优先级很高，在抓取其他页面前就被处理。而这个<code class="docutils literal notranslate"><span class="pre">item</span></code>会一直在这个pipeline中被锁定，直到所有的文件下载完成。</p></li>
+<li><p>当文件被下载完之后，结果会被赋值给另一个<code class="docutils literal notranslate"><span class="pre">files</span></code>字段。这个字段包含一个关于下载文件新的字典列表，比如下载路径，源地址，文件校验码。<code class="docutils literal notranslate"><span class="pre">files</span></code>里面的顺序和<code class="docutils literal notranslate"><span class="pre">file_url</span></code>顺序是一致的。要是某个写文件下载出错就不会出现在这个<code class="docutils literal notranslate"><span class="pre">files</span></code>中了。</p></li>
+</ol>
+</div>
+<div class="section" id="images-pipeline">
+<h2>使用Images Pipeline<a class="headerlink" href="#images-pipeline" title="永久链接至标题">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">ImagesPipeline</span></code>跟<code class="docutils literal notranslate"><span class="pre">FilesPipeline</span></code>的使用差不多，不过使用的字段名不一样，<code class="docutils literal notranslate"><span class="pre">image_urls</span></code>保存图片URL地址，<code class="docutils literal notranslate"><span class="pre">images</span></code>保存下载后的图片信息。</p>
+<p>使用<code class="docutils literal notranslate"><span class="pre">ImagesPipeline</span></code>的好处是你可以通过配置来提供额外的功能，比如生成文件缩略图，通过图片大小过滤需要下载的图片等。</p>
+<p><code class="docutils literal notranslate"><span class="pre">ImagesPipeline</span></code>使用<a class="reference external" href="https://github.com/python-pillow/Pillow">Pillow</a>来生成缩略图以及转换成标准的JPEG/RGB格式。因此你需要安装这个包，我们建议你使用Pillow而不是PIL。</p>
+</div>
+<div class="section" id="id1">
+<h2>使用例子<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
+<p>要使用媒体管道，请先在配置文件中打开它</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 同时使用图片和文件管道</span>
+<span class="n">ITEM_PIPELINES</span> <span class="o">=</span> <span class="p">{</span>
+                  <span class="s1">&#39;scrapy.pipelines.images.ImagesPipeline&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                  <span class="s1">&#39;scrapy.pipelines.files.FilesPipeline&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                 <span class="p">}</span>
+<span class="n">FILES_STORE</span> <span class="o">=</span> <span class="s1">&#39;/path/to/valid/dir&#39;</span>  <span class="c1"># 文件存储路径</span>
+<span class="n">IMAGES_STORE</span> <span class="o">=</span> <span class="s1">&#39;/path/to/valid/dir&#39;</span> <span class="c1"># 图片存储路径</span>
+<span class="c1"># 90 days of delay for files expiration</span>
+<span class="n">FILES_EXPIRES</span> <span class="o">=</span> <span class="mi">90</span>
+<span class="c1"># 30 days of delay for images expiration</span>
+<span class="n">IMAGES_EXPIRES</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="c1"># 图片缩略图</span>
+<span class="n">IMAGES_THUMBS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;small&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
+    <span class="s1">&#39;big&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">270</span><span class="p">,</span> <span class="mi">270</span><span class="p">),</span>
+<span class="p">}</span>
+<span class="c1"># 图片过滤器，最小高度和宽度</span>
+<span class="n">IMAGES_MIN_HEIGHT</span> <span class="o">=</span> <span class="mi">110</span>
+<span class="n">IMAGES_MIN_WIDTH</span> <span class="o">=</span> <span class="mi">110</span>
+</pre></div>
+</div>
+<p>一个使用了缩略图的下载例子会生成如下图片：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">IMAGES_STORE</span><span class="o">&gt;/</span><span class="n">full</span><span class="o">/</span><span class="mi">63</span><span class="n">bbfea82b8880ed33cdb762aa11fab722a90a24</span><span class="o">.</span><span class="n">jpg</span>
+<span class="o">&lt;</span><span class="n">IMAGES_STORE</span><span class="o">&gt;/</span><span class="n">thumbs</span><span class="o">/</span><span class="n">small</span><span class="o">/</span><span class="mi">63</span><span class="n">bbfea82b8880ed33cdb762aa11fab722a90a24</span><span class="o">.</span><span class="n">jpg</span>
+<span class="o">&lt;</span><span class="n">IMAGES_STORE</span><span class="o">&gt;/</span><span class="n">thumbs</span><span class="o">/</span><span class="n">big</span><span class="o">/</span><span class="mi">63</span><span class="n">bbfea82b8880ed33cdb762aa11fab722a90a24</span><span class="o">.</span><span class="n">jpg</span>
+</pre></div>
+</div>
+<p>然后，某个Item返回时，有<code class="docutils literal notranslate"><span class="pre">file_urls</span></code>或<code class="docutils literal notranslate"><span class="pre">image_urls</span></code>，并且存在相应的<code class="docutils literal notranslate"><span class="pre">files</span></code>或<code class="docutils literal notranslate"><span class="pre">images</span></code>字段</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scrapy</span>
+
+<span class="k">class</span> <span class="nc">MyItem</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+
+    <span class="c1"># ... other item fields ...</span>
+    <span class="n">image_urls</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+    <span class="n">images</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>自定义媒体管道<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<p>如果你还需要更加复杂的功能，想自定义下载媒体逻辑，请参考<a class="reference external" href="http://doc.scrapy.org/en/1.0/topics/media-pipeline.html#topics-media-pipeline-override">扩展媒体管道</a></p>
+<p>不管是扩展<code class="docutils literal notranslate"><span class="pre">FilesPipeline</span></code>还是<code class="docutils literal notranslate"><span class="pre">ImagesPipeline</span></code>,都只需重写下面两个方法</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">get_media_requests(self,</span> <span class="pre">item,</span> <span class="pre">info)</span></code>,返回一个<code class="docutils literal notranslate"><span class="pre">Request</span></code>对象</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">item_completed(self,</span> <span class="pre">results,</span> <span class="pre">item,</span> <span class="pre">info)</span></code>,当上门的Request下载完成后回调这个方法，然后填充<code class="docutils literal notranslate"><span class="pre">files</span></code>或<code class="docutils literal notranslate"><span class="pre">images</span></code>字段</p></li>
+</ul>
+<p>下面是一个扩展<code class="docutils literal notranslate"><span class="pre">ImagesPipeline</span></code>的例子，我只取path信息，并将它赋给<code class="docutils literal notranslate"><span class="pre">image_paths</span></code>字段，而不是默认的<code class="docutils literal notranslate"><span class="pre">images</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scrapy</span>
+<span class="kn">from</span> <span class="nn">scrapy.pipelines.images</span> <span class="kn">import</span> <span class="n">ImagesPipeline</span>
+<span class="kn">from</span> <span class="nn">scrapy.exceptions</span> <span class="kn">import</span> <span class="n">DropItem</span>
+
+<span class="k">class</span> <span class="nc">MyImagesPipeline</span><span class="p">(</span><span class="n">ImagesPipeline</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">get_media_requests</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">image_url</span> <span class="ow">in</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;image_urls&#39;</span><span class="p">]:</span>
+            <span class="k">yield</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">image_url</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">item_completed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="n">image_paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">ok</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">results</span> <span class="k">if</span> <span class="n">ok</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">image_paths</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">DropItem</span><span class="p">(</span><span class="s2">&quot;Item contains no images&quot;</span><span class="p">)</span>
+        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;image_paths&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">image_paths</span>
+        <span class="k">return</span> <span class="n">item</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="scrapy-09.html" class="btn btn-neutral float-right" title="Scrapy教程09- 部署" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="scrapy-07.html" class="btn btn-neutral float-left" title="Scrapy教程07- 内置服务" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Xiong Neng
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

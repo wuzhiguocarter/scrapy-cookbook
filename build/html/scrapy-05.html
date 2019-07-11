@@ -1,0 +1,453 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Scrapy教程05- Item详解 &mdash; scrapy-cookbook 0.2.2 文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="Scrapy教程06- Item Pipeline" href="scrapy-06.html" />
+    <link rel="prev" title="Scrapy教程04- Selector详解" href="scrapy-04.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> scrapy-cookbook
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="scrapy-01.html">Scrapy教程01- 入门篇</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-02.html">Scrapy教程02- 完整示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-03.html">Scrapy教程03- Spider详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-04.html">Scrapy教程04- Selector详解</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Scrapy教程05- Item详解</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#item">定义Item</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#item-fields">Item Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Item使用示例</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">获取值</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">设置值</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">访问所有的值</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#item-loader">Item Loader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">输入/输出处理器</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">自定义Item Loader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#field">在Field定义中声明输入/输出处理器</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">Item Loader上下文</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">内置的处理器</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-06.html">Scrapy教程06- Item Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-07.html">Scrapy教程07- 内置服务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-08.html">Scrapy教程08- 文件与图片</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-09.html">Scrapy教程09- 部署</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-10.html">Scrapy教程10- 动态配置爬虫</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-11.html">Scrapy教程11- 模拟登录</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-12.html">Scrapy教程12- 抓取动态网站</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other/about.html">联系我</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scrapy-cookbook</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Scrapy教程05- Item详解</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/scrapy-05.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="scrapy05-item">
+<h1>Scrapy教程05- Item详解<a class="headerlink" href="#scrapy05-item" title="永久链接至标题">¶</a></h1>
+<p>Item是保存结构数据的地方，Scrapy可以将解析结果以字典形式返回，但是Python中字典缺少结构，在大型爬虫系统中很不方便。</p>
+<p>Item提供了类字典的API，并且可以很方便的声明字段，很多Scrapy组件可以利用Item的其他信息。</p>
+<div class="section" id="item">
+<h2>定义Item<a class="headerlink" href="#item" title="永久链接至标题">¶</a></h2>
+<p>定义Item非常简单，只需要继承<code class="docutils literal notranslate"><span class="pre">scrapy.Item</span></code>类，并将所有字段都定义为<code class="docutils literal notranslate"><span class="pre">scrapy.Field</span></code>类型即可</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scrapy</span>
+
+<span class="k">class</span> <span class="nc">Product</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+    <span class="n">price</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+    <span class="n">stock</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+    <span class="n">last_updated</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">serializer</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="item-fields">
+<h2>Item Fields<a class="headerlink" href="#item-fields" title="永久链接至标题">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Field</span></code>对象可用来对每个字段指定元数据。例如上面<code class="docutils literal notranslate"><span class="pre">last_updated</span></code>的序列化函数指定为<code class="docutils literal notranslate"><span class="pre">str</span></code>，可任意指定元数据，不过每种元数据对于不同的组件意义不一样。</p>
+</div>
+<div class="section" id="id1">
+<h2>Item使用示例<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
+<p>你会看到Item的使用跟Python中的字典API非常类似 ### 创建Item</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">product</span> <span class="o">=</span> <span class="n">Product</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Desktop PC&#39;</span><span class="p">,</span> <span class="n">price</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">product</span>
+<span class="go">Product(name=&#39;Desktop PC&#39;, price=1000)</span>
+</pre></div>
+</div>
+<div class="section" id="id2">
+<h3>获取值<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">product</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+<span class="go">Desktop PC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">product</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
+<span class="go">Desktop PC</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">product</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span>
+<span class="go">1000</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">product</span><span class="p">[</span><span class="s1">&#39;last_updated&#39;</span><span class="p">]</span>
+<span class="gt">Traceback (most recent call last):</span>
+    <span class="o">...</span>
+<span class="gr">KeyError</span>: <span class="n">&#39;last_updated&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">product</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;last_updated&#39;</span><span class="p">,</span> <span class="s1">&#39;not set&#39;</span><span class="p">)</span>
+<span class="go">not set</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">product</span><span class="p">[</span><span class="s1">&#39;lala&#39;</span><span class="p">]</span> <span class="c1"># getting unknown field</span>
+<span class="gt">Traceback (most recent call last):</span>
+    <span class="o">...</span>
+<span class="gr">KeyError</span>: <span class="n">&#39;lala&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">product</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lala&#39;</span><span class="p">,</span> <span class="s1">&#39;unknown field&#39;</span><span class="p">)</span>
+<span class="go">&#39;unknown field&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;name&#39;</span> <span class="ow">in</span> <span class="n">product</span>  <span class="c1"># is name field populated?</span>
+<span class="go">True</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;last_updated&#39;</span> <span class="ow">in</span> <span class="n">product</span>  <span class="c1"># is last_updated populated?</span>
+<span class="go">False</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;last_updated&#39;</span> <span class="ow">in</span> <span class="n">product</span><span class="o">.</span><span class="n">fields</span>  <span class="c1"># is last_updated a declared field?</span>
+<span class="go">True</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;lala&#39;</span> <span class="ow">in</span> <span class="n">product</span><span class="o">.</span><span class="n">fields</span>  <span class="c1"># is lala a declared field?</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>设置值<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">product</span><span class="p">[</span><span class="s1">&#39;last_updated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;today&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">product</span><span class="p">[</span><span class="s1">&#39;last_updated&#39;</span><span class="p">]</span>
+<span class="go">today</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">product</span><span class="p">[</span><span class="s1">&#39;lala&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span> <span class="c1"># setting unknown field</span>
+<span class="gt">Traceback (most recent call last):</span>
+    <span class="o">...</span>
+<span class="gr">KeyError</span>: <span class="n">&#39;Product does not support field: lala&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>访问所有的值<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">product</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">[&#39;price&#39;, &#39;name&#39;]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">product</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+<span class="go">[(&#39;price&#39;, 1000), (&#39;name&#39;, &#39;Desktop PC&#39;)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="item-loader">
+<h2>Item Loader<a class="headerlink" href="#item-loader" title="永久链接至标题">¶</a></h2>
+<p>Item
+Loader为我们提供了生成Item的相当便利的方法。Item为抓取的数据提供了容器，而Item
+Loader可以让我们非常方便的将输入填充到容器中。</p>
+<p>下面我们通过一个例子来展示一般使用方法：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scrapy.loader</span> <span class="kn">import</span> <span class="n">ItemLoader</span>
+<span class="kn">from</span> <span class="nn">myproject.items</span> <span class="kn">import</span> <span class="n">Product</span>
+
+<span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="n">ItemLoader</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">Product</span><span class="p">(),</span> <span class="n">response</span><span class="o">=</span><span class="n">response</span><span class="p">)</span>
+    <span class="n">l</span><span class="o">.</span><span class="n">add_xpath</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;//div[@class=&quot;product_name&quot;]&#39;</span><span class="p">)</span>
+    <span class="n">l</span><span class="o">.</span><span class="n">add_xpath</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;//div[@class=&quot;product_title&quot;]&#39;</span><span class="p">)</span>
+    <span class="n">l</span><span class="o">.</span><span class="n">add_xpath</span><span class="p">(</span><span class="s1">&#39;price&#39;</span><span class="p">,</span> <span class="s1">&#39;//p[@id=&quot;price&quot;]&#39;</span><span class="p">)</span>
+    <span class="n">l</span><span class="o">.</span><span class="n">add_css</span><span class="p">(</span><span class="s1">&#39;stock&#39;</span><span class="p">,</span> <span class="s1">&#39;p#stock]&#39;</span><span class="p">)</span>
+    <span class="n">l</span><span class="o">.</span><span class="n">add_value</span><span class="p">(</span><span class="s1">&#39;last_updated&#39;</span><span class="p">,</span> <span class="s1">&#39;today&#39;</span><span class="p">)</span> <span class="c1"># you can also use literal values</span>
+    <span class="k">return</span> <span class="n">l</span><span class="o">.</span><span class="n">load_item</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>注意上面的<code class="docutils literal notranslate"><span class="pre">name</span></code>字段是从两个xpath路径添累加后得到。</p>
+</div>
+<div class="section" id="id5">
+<h2>输入/输出处理器<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h2>
+<p>每个Item
+Loader对每个<code class="docutils literal notranslate"><span class="pre">Field</span></code>都有一个输入处理器和一个输出处理器。输入处理器在数据被接受到时执行，当数据收集完后调用<code class="docutils literal notranslate"><span class="pre">ItemLoader.load_item()</span></code>时再执行输出处理器，返回最终结果。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">l</span> <span class="o">=</span> <span class="n">ItemLoader</span><span class="p">(</span><span class="n">Product</span><span class="p">(),</span> <span class="n">some_selector</span><span class="p">)</span>
+<span class="n">l</span><span class="o">.</span><span class="n">add_xpath</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">xpath1</span><span class="p">)</span> <span class="c1"># (1)</span>
+<span class="n">l</span><span class="o">.</span><span class="n">add_xpath</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">xpath2</span><span class="p">)</span> <span class="c1"># (2)</span>
+<span class="n">l</span><span class="o">.</span><span class="n">add_css</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">css</span><span class="p">)</span> <span class="c1"># (3)</span>
+<span class="n">l</span><span class="o">.</span><span class="n">add_value</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">)</span> <span class="c1"># (4)</span>
+<span class="k">return</span> <span class="n">l</span><span class="o">.</span><span class="n">load_item</span><span class="p">()</span> <span class="c1"># (5)</span>
+</pre></div>
+</div>
+<p>执行流程是这样的：</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">xpath1</span></code>中的数据被提取出来，然后传输到<code class="docutils literal notranslate"><span class="pre">name</span></code>字段的输入处理器中，在输入处理器处理完后生成结果放在Item
+Loader里面(这时候没有赋值给item)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">xpath2</span></code>数据被提取出来，然后传输给(1)中同样的输入处理器，因为它们都是<code class="docutils literal notranslate"><span class="pre">name</span></code>字段的处理器，然后处理结果被附加到(1)的结果后面</p></li>
+<li><p>跟2一样</p></li>
+<li><p>跟3一样，不过这次是直接的字面字符串值，先转换成一个单元素的可迭代对象再传给输入处理器</p></li>
+<li><p>上面4步的数据被传输给<code class="docutils literal notranslate"><span class="pre">name</span></code>的输出处理器，将最终的结果赋值给<code class="docutils literal notranslate"><span class="pre">name</span></code>字段</p></li>
+</ol>
+</div>
+<div class="section" id="id6">
+<h2>自定义Item Loader<a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h2>
+<p>使用类定义语法，下面是一个例子</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scrapy.loader</span> <span class="kn">import</span> <span class="n">ItemLoader</span>
+<span class="kn">from</span> <span class="nn">scrapy.loader.processors</span> <span class="kn">import</span> <span class="n">TakeFirst</span><span class="p">,</span> <span class="n">MapCompose</span><span class="p">,</span> <span class="n">Join</span>
+
+<span class="k">class</span> <span class="nc">ProductLoader</span><span class="p">(</span><span class="n">ItemLoader</span><span class="p">):</span>
+
+    <span class="n">default_output_processor</span> <span class="o">=</span> <span class="n">TakeFirst</span><span class="p">()</span>
+
+    <span class="n">name_in</span> <span class="o">=</span> <span class="n">MapCompose</span><span class="p">(</span><span class="nb">unicode</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">name_out</span> <span class="o">=</span> <span class="n">Join</span><span class="p">()</span>
+
+    <span class="n">price_in</span> <span class="o">=</span> <span class="n">MapCompose</span><span class="p">(</span><span class="nb">unicode</span><span class="o">.</span><span class="n">strip</span><span class="p">)</span>
+
+    <span class="c1"># ...</span>
+</pre></div>
+</div>
+<p>通过<code class="docutils literal notranslate"><span class="pre">_in</span></code>和<code class="docutils literal notranslate"><span class="pre">_out</span></code>后缀来定义输入和输出处理器，并且还可以定义默认的<code class="docutils literal notranslate"><span class="pre">ItemLoader.default_input_processor</span></code>和<code class="docutils literal notranslate"><span class="pre">ItemLoader.default_input_processor</span></code>.</p>
+</div>
+<div class="section" id="field">
+<h2>在Field定义中声明输入/输出处理器<a class="headerlink" href="#field" title="永久链接至标题">¶</a></h2>
+<p>还有个地方可以非常方便的添加输入/输出处理器，那就是直接在Field定义中</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scrapy</span>
+<span class="kn">from</span> <span class="nn">scrapy.loader.processors</span> <span class="kn">import</span> <span class="n">Join</span><span class="p">,</span> <span class="n">MapCompose</span><span class="p">,</span> <span class="n">TakeFirst</span>
+<span class="kn">from</span> <span class="nn">w3lib.html</span> <span class="kn">import</span> <span class="n">remove_tags</span>
+
+<span class="k">def</span> <span class="nf">filter_price</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+<span class="k">class</span> <span class="nc">Product</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span>
+        <span class="n">input_processor</span><span class="o">=</span><span class="n">MapCompose</span><span class="p">(</span><span class="n">remove_tags</span><span class="p">),</span>
+        <span class="n">output_processor</span><span class="o">=</span><span class="n">Join</span><span class="p">(),</span>
+    <span class="p">)</span>
+    <span class="n">price</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span>
+        <span class="n">input_processor</span><span class="o">=</span><span class="n">MapCompose</span><span class="p">(</span><span class="n">remove_tags</span><span class="p">,</span> <span class="n">filter_price</span><span class="p">),</span>
+        <span class="n">output_processor</span><span class="o">=</span><span class="n">TakeFirst</span><span class="p">(),</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>优先级：</p>
+<ol class="arabic simple">
+<li><p>在Item Loader中定义的<code class="docutils literal notranslate"><span class="pre">field_in</span></code>和<code class="docutils literal notranslate"><span class="pre">field_out</span></code></p></li>
+<li><p>Filed元数据(<code class="docutils literal notranslate"><span class="pre">input_processor</span></code>和<code class="docutils literal notranslate"><span class="pre">output_processor</span></code>关键字)</p></li>
+<li><p>Item Loader中的默认的</p></li>
+</ol>
+<p>Tips：一般来讲，将输入处理器定义在Item
+Loader的定义中<code class="docutils literal notranslate"><span class="pre">field_in</span></code>，然后将输出处理器定义在Field元数据中</p>
+</div>
+<div class="section" id="id7">
+<h2>Item Loader上下文<a class="headerlink" href="#id7" title="永久链接至标题">¶</a></h2>
+<p>Item Loader上下文被所有输入/输出处理器共享，比如你有一个解析长度的函数</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">parse_length</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">loader_context</span><span class="p">):</span>
+    <span class="n">unit</span> <span class="o">=</span> <span class="n">loader_context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;unit&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">)</span>
+    <span class="c1"># ... length parsing code goes here ...</span>
+    <span class="k">return</span> <span class="n">parsed_length</span>
+</pre></div>
+</div>
+<p>初始化和修改上下文的值</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">loader</span> <span class="o">=</span> <span class="n">ItemLoader</span><span class="p">(</span><span class="n">product</span><span class="p">)</span>
+<span class="n">loader</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s1">&#39;unit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;cm&#39;</span>
+
+<span class="n">loader</span> <span class="o">=</span> <span class="n">ItemLoader</span><span class="p">(</span><span class="n">product</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;cm&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">ProductLoader</span><span class="p">(</span><span class="n">ItemLoader</span><span class="p">):</span>
+    <span class="n">length_out</span> <span class="o">=</span> <span class="n">MapCompose</span><span class="p">(</span><span class="n">parse_length</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;cm&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id8">
+<h2>内置的处理器<a class="headerlink" href="#id8" title="永久链接至标题">¶</a></h2>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Identity</span></code> 啥也不做</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TakeFirst</span></code> 返回第一个非空值，通常用作输出处理器</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Join</span></code> 将结果连起来，默认使用空格’ ’</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Compose</span></code> 将函数链接起来形成管道流，产生最后的输出</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MapCompose</span></code>
+跟上面的<code class="docutils literal notranslate"><span class="pre">Compose</span></code>类似，区别在于内部结果在函数中的传递方式.
+它的输入值是可迭代的，首先将第一个函数依次作用于所有值，产生新的可迭代输入，作为第二个函数的输入，最后生成的结果连起来返回最终值，一般用在输入处理器中。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SelectJmes</span></code> 使用json路径来查询值并返回结果</p></li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="scrapy-06.html" class="btn btn-neutral float-right" title="Scrapy教程06- Item Pipeline" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="scrapy-04.html" class="btn btn-neutral float-left" title="Scrapy教程04- Selector详解" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Xiong Neng
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

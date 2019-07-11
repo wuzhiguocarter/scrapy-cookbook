@@ -1,0 +1,360 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Scrapy教程01- 入门篇 &mdash; scrapy-cookbook 0.2.2 文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="Scrapy教程02- 完整示例" href="scrapy-02.html" />
+    <link rel="prev" title="Welcome to scrapy-cookbook" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> scrapy-cookbook
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Scrapy教程01- 入门篇</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#scrapy">安装scrapy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">简单示例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">Scrapy特性一览</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-02.html">Scrapy教程02- 完整示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-03.html">Scrapy教程03- Spider详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-04.html">Scrapy教程04- Selector详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-05.html">Scrapy教程05- Item详解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-06.html">Scrapy教程06- Item Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-07.html">Scrapy教程07- 内置服务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-08.html">Scrapy教程08- 文件与图片</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-09.html">Scrapy教程09- 部署</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-10.html">Scrapy教程10- 动态配置爬虫</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-11.html">Scrapy教程11- 模拟登录</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scrapy-12.html">Scrapy教程12- 抓取动态网站</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other/about.html">联系我</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scrapy-cookbook</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Scrapy教程01- 入门篇</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/scrapy-01.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="scrapy01">
+<h1>Scrapy教程01- 入门篇<a class="headerlink" href="#scrapy01" title="永久链接至标题">¶</a></h1>
+<p>Scrapy是一个为了爬取网站数据，提取结构性数据而编写的应用框架。可以应用在包括数据挖掘，
+信息处理或存储历史数据等一系列的程序中。其最初是为了页面抓取(更确切来说,网络抓取)所设计的，
+也可以应用在获取API所返回的数据(比如Web Services)或者通用的网络爬虫。</p>
+<p>Scrapy也能帮你实现高阶的爬虫框架，比如爬取时的网站认证、内容的分析处理、重复抓取、分布式爬取等等很复杂的事。</p>
+<div class="section" id="scrapy">
+<h2>安装scrapy<a class="headerlink" href="#scrapy" title="永久链接至标题">¶</a></h2>
+<p>我的测试环境是centos6.5</p>
+<p>升级python到最新版的2.7，下面的所有步骤都切换到root用户</p>
+<p>由于scrapy目前只能运行在python2上，所以先更新centos上面的python到最新的
+<a class="reference external" href="https://www.python.org/downloads/release/python-2711/">Python
+2.7.11</a>，
+具体方法请google下很多这样的教程。</p>
+<p>先安装一些依赖软件</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">yum</span> <span class="n">install</span> <span class="n">python</span><span class="o">-</span><span class="n">devel</span>
+<span class="n">yum</span> <span class="n">install</span> <span class="n">libffi</span><span class="o">-</span><span class="n">devel</span>
+<span class="n">yum</span> <span class="n">install</span> <span class="n">openssl</span><span class="o">-</span><span class="n">devel</span>
+</pre></div>
+</div>
+<p>然后安装pyopenssl库</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyopenssl</span>
+</pre></div>
+</div>
+<p>安装xlml</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">yum</span> <span class="n">install</span> <span class="n">python</span><span class="o">-</span><span class="n">lxml</span>
+<span class="n">yum</span> <span class="n">install</span> <span class="n">libxml2</span><span class="o">-</span><span class="n">devel</span>
+<span class="n">yum</span> <span class="n">install</span> <span class="n">libxslt</span><span class="o">-</span><span class="n">devel</span>
+</pre></div>
+</div>
+<p>安装service-identity</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">service</span><span class="o">-</span><span class="n">identity</span>
+</pre></div>
+</div>
+<p>安装twisted</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">scrapy</span>
+</pre></div>
+</div>
+<p>安装scrapy</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">scrapy</span> <span class="o">-</span><span class="n">U</span>
+</pre></div>
+</div>
+<p>测试scrapy</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scrapy</span> <span class="n">bench</span>
+</pre></div>
+</div>
+<p>最终成功，太不容易了！</p>
+</div>
+<div class="section" id="id1">
+<h2>简单示例<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
+<p>创建一个python源文件，名为stackoverflow.py，内容如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scrapy</span>
+
+
+<span class="k">class</span> <span class="nc">StackOverflowSpider</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Spider</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;stackoverflow&#39;</span>
+    <span class="n">start_urls</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;http://stackoverflow.com/questions?sort=votes&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">href</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;.question-summary h3 a::attr(href)&#39;</span><span class="p">):</span>
+            <span class="n">full_url</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">urljoin</span><span class="p">(</span><span class="n">href</span><span class="o">.</span><span class="n">extract</span><span class="p">())</span>
+            <span class="k">yield</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">full_url</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parse_question</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">parse_question</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="p">{</span>
+            <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;h1 a::text&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;votes&#39;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;.question .vote-count-post::text&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;body&#39;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;.question .post-text&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;tags&#39;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;.question .post-tag::text&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">(),</span>
+            <span class="s1">&#39;link&#39;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">url</span><span class="p">,</span>
+        <span class="p">}</span>
+</pre></div>
+</div>
+<p>运行：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scrapy</span> <span class="n">runspider</span> <span class="n">stackoverflow_spider</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">o</span> <span class="n">top</span><span class="o">-</span><span class="n">stackoverflow</span><span class="o">-</span><span class="n">questions</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>结果类似下面：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[{</span>
+    <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="s2">&quot;... LONG HTML HERE ...&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;http://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-an-unsorted-array&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;java&quot;</span><span class="p">,</span> <span class="s2">&quot;c++&quot;</span><span class="p">,</span> <span class="s2">&quot;performance&quot;</span><span class="p">,</span> <span class="s2">&quot;optimization&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Why is processing a sorted array faster than an unsorted array?&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;votes&quot;</span><span class="p">:</span> <span class="s2">&quot;9924&quot;</span>
+<span class="p">},</span>
+<span class="p">{</span>
+    <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="s2">&quot;... LONG HTML HERE ...&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;http://stackoverflow.com/questions/1260748/how-do-i-remove-a-git-submodule&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;git-submodules&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;How do I remove a Git submodule?&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;votes&quot;</span><span class="p">:</span> <span class="s2">&quot;1764&quot;</span>
+<span class="p">},</span>
+<span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>当你运行<code class="docutils literal notranslate"><span class="pre">scrapy</span> <span class="pre">runspider</span> <span class="pre">somefile.py</span></code>这条语句的时候，Scrapy会去寻找源文件中定义的一个spider并且交给爬虫引擎来执行它。
+<code class="docutils literal notranslate"><span class="pre">start_urls</span></code>属性定义了开始的URL，爬虫会通过它来构建初始的请求，返回response后再调用默认的回调方法<code class="docutils literal notranslate"><span class="pre">parse</span></code>并传入这个response。
+我们在<code class="docutils literal notranslate"><span class="pre">parse</span></code>回调方法中通过使用css选择器提取每个提问页面链接的href属性值，然后<code class="docutils literal notranslate"><span class="pre">yield</span></code>另外一个请求，
+并注册<code class="docutils literal notranslate"><span class="pre">parse_question</span></code>回调方法，在这个请求完成后被执行。</p>
+<p>处理流程图：</p>
+<div class="figure align-default" id="id3">
+<img alt="scrapy架构图" src="_images/scrapy.png" />
+<p class="caption"><span class="caption-text">scrapy架构图</span><a class="headerlink" href="#id3" title="永久链接至图片">¶</a></p>
+</div>
+<p>Scrapy的一个好处是所有请求都是被调度并异步处理，就算某个请求出错也不影响其他请求继续被处理。</p>
+<p>我们的示例中将解析结果生成json格式，你还可以导出为其他格式（比如XML、CSV），或者是将其存储到FTP、Amazon
+S3上。
+你还可以通过<a class="reference external" href="http://doc.scrapy.org/en/1.0/topics/item-pipeline.html#topics-item-pipeline">pipeline</a>
+将它们存储到数据库中去，这些数据保存的方式各种各样。</p>
+</div>
+<div class="section" id="id2">
+<h2>Scrapy特性一览<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<p>你已经可以通过Scrapy从一个网站上面爬取数据并将其解析保存下来了，但是这只是Scrapy的皮毛。
+Scrapy提供了更多的特性来让你爬取更加容易和高效。比如：</p>
+<ol class="arabic simple">
+<li><p>内置支持扩展的CSS选择器和XPath表达式来从HTML/XML源码中选择并提取数据，还能使用正则表达式</p></li>
+<li><p>提供交互式shell控制台试验CSS和XPath表达式，这个在调试你的蜘蛛程序时很有用</p></li>
+<li><p>内置支持生成多种格式的订阅导出（JSON、CSV、XML）并将它们存储在多个位置（FTP、S3、本地文件系统）</p></li>
+<li><p>健壮的编码支持和自动识别，用于处理外文、非标准和错误编码问题</p></li>
+<li><p>可扩展，允许你使用<a class="reference external" href="http://doc.scrapy.org/en/1.0/topics/signals.html#topics-signals">signals</a>
+和友好的API(middlewares, extensions,
+和pipelines)来编写自定义插件功能。</p></li>
+<li><p>大量的内置扩展和中间件供使用：</p>
+<ul class="simple">
+<li><p>cookies and session handling</p></li>
+<li><p>HTTP features like compression, authentication, caching</p></li>
+<li><p>user-agent spoofing</p></li>
+<li><p>robots.txt</p></li>
+<li><p>crawl depth restriction</p></li>
+<li><p>and more</p></li>
+</ul>
+</li>
+<li><p>还有其他好多好东东，比如可重复利用蜘蛛来爬取<a class="reference external" href="http://www.sitemaps.org/">Sitemaps</a>和XML/CSV订阅，
+一个跟爬取元素关联的媒体管道来
+<a class="reference external" href="http://doc.scrapy.org/en/1.0/topics/media-pipeline.html#topics-media-pipeline">自动下载图片</a>，
+一个缓存DNS解析器等等。</p></li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="scrapy-02.html" class="btn btn-neutral float-right" title="Scrapy教程02- 完整示例" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to scrapy-cookbook" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Xiong Neng
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
