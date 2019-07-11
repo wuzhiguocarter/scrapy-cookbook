@@ -143,7 +143,7 @@ latex_documents = [
 ]
 
 # open for create pdf
-# latex_engine = 'xelatex'
+latex_engine = 'xelatex'
 
 # -- Options for manual page output ---------------------------------------
 
